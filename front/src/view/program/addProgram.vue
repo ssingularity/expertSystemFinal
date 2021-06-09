@@ -153,6 +153,7 @@
                         this.$http.get('http://localhost:8080/program/auto/'+ this.id).then((res) => {
                             // this.tableData = res.data
                             console.log(res.data)
+                            if (res.data==="专家太少，自动选满缺少专家") alert("专家太少，自动选择缺少专家")
                         }).catch(function (err) {
                             alert(err)
                         })

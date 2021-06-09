@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -41,7 +40,7 @@ public class ProgramServiceImpl implements ProgramService {
     }
 
     @Override
-    public void autoChoose(Integer id) {
+    public String autoChoose(Integer id) {
         Program p = programrepository.findById(id);
         List<Expert> experts=expertservice.findAll();
         List<Record> alreadyChose=recordservice.findByProgram(id);//get the number of experts chosen before
@@ -55,14 +54,15 @@ public class ProgramServiceImpl implements ProgramService {
             experts.removeIf(e -> e.getId().equals(record.getExpertID()));
         }
         int neednum=hasAccount?p.getNumber():p.getNumber()-1;//没有财务的少找一个专家
-        for (int i=alreadyChose.size();i<neednum;i++){
-            //找合适的专家 insert record
-            List<Expert> candidates=new ArrayList<>();
-            for (Expert e:experts) {
-                if (e.getArea().contains(p.getArea())&&(!e.getCompany().contains(p.getCompany()))){//排除单位，已选择的，匹配专业
-                    candidates.add(e);
-                }
+        //找合适的专家 insert record
+        List<Expert> candidates=new ArrayList<>();
+        for (Expert e:experts) {
+            if (e.getArea().contains(p.getArea())&&(!e.getCompany().contains(p.getCompany()))){//排除单位，已选择的，匹配专业
+                candidates.add(e);
             }
+        }
+        if (candidates.size()<2){return "专家太少，自动选满缺少专家";}
+        for (int i=alreadyChose.size();i<neednum;i++){
             Record record =new Record();
             record.setProgramID(id);
             Random rd=new Random(System.currentTimeMillis());
@@ -82,6 +82,7 @@ public class ProgramServiceImpl implements ProgramService {
                 }
             }
             //random account
+            if (accounts.size()<2){return "专家太少，自动选满缺少专家";}
             Random rd=new Random(System.currentTimeMillis());
             String EId=accounts.get(rd.nextInt(accounts.size()-1)).getId();
             record.setExpertID(EId);
@@ -90,8 +91,8 @@ public class ProgramServiceImpl implements ProgramService {
         }
         if (recordservice.findByProgram(id).size()<p.getNumber()){
             //没选满
-            
-        }
+            return "专家太少，自动选满缺少专家";
+        }else return "success";
     }
 
 

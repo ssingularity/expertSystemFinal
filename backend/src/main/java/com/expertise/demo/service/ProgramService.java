@@ -10,5 +10,5 @@ public interface ProgramService {
     List<Program> findAll();
 //    Optional<Program> findById(Integer id);
     Program findById(Integer id);
-    void autoChoose(Integer id);
+    String autoChoose(Integer id);
 }
