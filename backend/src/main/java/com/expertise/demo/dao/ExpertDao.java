@@ -12,9 +12,9 @@ import java.util.List;
 public class ExpertDao {
 
     private ExpertListener expertListener = new ExpertListener();
-    final private String localExcelPath = "";
+    final private String localExcelPath = "C:/Users/hzlan/Desktop/1/expert.xlsx";
 
-    final private static String LocalExcelPath="C:/Users/hzlan/Desktop/1/expert.xlsx";
+//    final private String LocalExcelPath="C:/Users/hzlan/Desktop/1/expert.xlsx";
 
     ExpertDao(){
 

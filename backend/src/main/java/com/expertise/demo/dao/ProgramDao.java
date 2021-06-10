@@ -2,6 +2,7 @@ package com.expertise.demo.dao;
 
 import com.alibaba.excel.EasyExcel;
 import com.expertise.demo.entity.Program;
+import com.expertise.demo.entity.Record;
 import com.expertise.demo.util.ProgramListener;
 import org.springframework.stereotype.Repository;
 
@@ -33,6 +34,10 @@ public class ProgramDao {
     }
 
     public Program insert(Program p){
+        List<Program> old=this.programListener.getProgramlist();
+        old.add(p);
+        EasyExcel.write(this.LocalExcelPath, Record.class).sheet().doWrite(old);
+        EasyExcel.read(this.LocalExcelPath,Record.class,this.programListener).sheet().doRead();
         return p;
     }
 }
