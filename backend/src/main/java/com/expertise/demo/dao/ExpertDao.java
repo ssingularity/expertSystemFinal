@@ -13,9 +13,11 @@ public class ExpertDao {
 
     private ExpertListener expertListener = new ExpertListener();
 
+    final private static String LocalExcelPath="C:/Users/hzlan/Desktop/1/expert.xlsx";
+
     ExpertDao(){
-        String fileName = "C:/Users/hzlan/Desktop/1/expert.xlsx";
-        EasyExcel.read(fileName, Expert.class, this.expertListener).sheet().doRead();
+//        String fileName = "C:/Users/hzlan/Desktop/1/expert.xlsx";
+        EasyExcel.read(LocalExcelPath, Expert.class, this.expertListener).sheet().doRead();
 
     }
 
