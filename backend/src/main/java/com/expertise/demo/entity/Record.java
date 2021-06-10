@@ -1,5 +1,6 @@
 package com.expertise.demo.entity;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -11,11 +12,17 @@ import java.util.Date;
 public class Record {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @ExcelProperty("评审ID")
     private Integer id;
+    @ExcelProperty("专家ID")
     private String expertID;
+    @ExcelProperty("项目ID")
     private Integer programID;
+    @ExcelProperty("评审时间")
     private Date time;
+    @ExcelProperty("评价")
     private String comment;
+    @ExcelProperty("分数")
     private int ontime;
 
     public Integer getId() {
