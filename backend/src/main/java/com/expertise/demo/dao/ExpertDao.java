@@ -12,12 +12,13 @@ import java.util.List;
 public class ExpertDao {
 
     private ExpertListener expertListener = new ExpertListener();
+    final private String localExcelPath = "";
 
     final private static String LocalExcelPath="C:/Users/hzlan/Desktop/1/expert.xlsx";
 
     ExpertDao(){
-//        String fileName = "C:/Users/hzlan/Desktop/1/expert.xlsx";
-        EasyExcel.read(LocalExcelPath, Expert.class, this.expertListener).sheet().doRead();
+
+        EasyExcel.read(this.localExcelPath, Expert.class, this.expertListener).sheet().doRead();
 
     }
 
@@ -40,6 +41,10 @@ public class ExpertDao {
     }
 
     public Expert insert(Expert expert){
+        List<Expert> oldExperts = this.expertListener.getExpertList();
+        oldExperts.add(expert);
+        EasyExcel.write(this.localExcelPath, Expert.class).sheet().doWrite(oldExperts);
+        EasyExcel.read(this.localExcelPath, Expert.class, this.expertListener).sheet().doRead();
         return expert;
     }
 }
