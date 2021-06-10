@@ -30,10 +30,19 @@ public class ExpertDao {
         return this.expertListener.getExpertList();
     }
 
-    public List<Expert> findById(String id){
-        List<Expert> result=new ArrayList<>();
+    public Expert findById(String id){
         for(Expert e:this.expertListener.getExpertList()){
             if (e.getId().equals(id)){
+                return e;
+            }
+        }
+        return null;
+    }
+
+    public List<Expert> findByName(String name){
+        List<Expert> result=new ArrayList<>();
+        for(Expert e:this.expertListener.getExpertList()){
+            if (e.getName().equals(name)){
                 result.add(e);
             }
         }
@@ -44,7 +53,7 @@ public class ExpertDao {
         List<Expert> oldExperts = this.expertListener.getExpertList();
         oldExperts.add(expert);
         EasyExcel.write(this.localExcelPath, Expert.class).sheet().doWrite(oldExperts);
-        EasyExcel.read(this.localExcelPath, Expert.class, this.expertListener).sheet().doRead();
+//        EasyExcel.read(this.localExcelPath, Expert.class, this.expertListener).sheet().doRead();
         return expert;
     }
 }

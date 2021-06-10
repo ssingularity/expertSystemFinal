@@ -25,7 +25,7 @@ public class ExpertServiceImpl implements ExpertService {
     }
 
     public Expert insert(Expert expert){
-        return expertrepository.save(expert);
+        return expertdao.insert(expert);
     }
 
     public List <Expert> findAll(){
@@ -33,13 +33,13 @@ public class ExpertServiceImpl implements ExpertService {
 //        return expertrepository.findAll();
     }
 
-    public Expert findByName(String name){
-        return expertrepository.findByName(name);
+    public List<Expert> findByName(String name){
+        return expertdao.findByName(name);
     }
 
     @Override
     public Expert findById(String id) {
 
-        return expertrepository.findById(id).orElse(null);
+        return expertdao.findById(id);
     }
 }

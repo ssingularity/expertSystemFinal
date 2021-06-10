@@ -9,6 +9,6 @@ public interface ExpertService {
      Expert insert(String name, String gender, Date birth, String phone, String type, String area, String intro, String company, String secret);
      Expert insert(Expert expert);
      List<Expert> findAll();
-     Expert findByName(String name);
+     List<Expert> findByName(String name);
      Expert findById(String id);
 }

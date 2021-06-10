@@ -37,7 +37,7 @@ public class ProgramDao {
         List<Program> old=this.programListener.getProgramlist();
         old.add(p);
         EasyExcel.write(this.LocalExcelPath, Record.class).sheet().doWrite(old);
-        EasyExcel.read(this.LocalExcelPath,Record.class,this.programListener).sheet().doRead();
+//        EasyExcel.read(this.LocalExcelPath,Record.class,this.programListener).sheet().doRead();
         return p;
     }
 }

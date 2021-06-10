@@ -17,7 +17,7 @@ public class RecordDao {
     final private static String localExcelPath="C:/Users/hzlan/Desktop/1/record.xlsx";
 
     RecordDao(){
-        EasyExcel.read(localExcelPath, Program.class,this.recordListener).sheet().doRead();
+        EasyExcel.read(localExcelPath, Record.class,this.recordListener).sheet().doRead();
     }
 
     public List<Record> findAll(){
@@ -34,11 +34,43 @@ public class RecordDao {
         return result;
     }
 
+    public List<Record> findByExpertID(String id){
+        List<Record> result=new ArrayList<>();
+        for(Record r:this.recordListener.getRecordList()){
+            if (r.getExpertID().equals(id)){
+                result.add(r);
+            }
+        }
+        return result;
+    }
+
+    public List<Record> findByProgramID(Integer Pid){
+        List<Record> result=new ArrayList<>();
+        for(Record r:this.recordListener.getRecordList()){
+            if (r.getProgramID().equals(Pid)){
+                result.add(r);
+            }
+        }
+        return result;
+    }
+
+    public void deleteById(Integer id){
+        List<Record> old=this.recordListener.getRecordList();
+        for(Record r:this.recordListener.getRecordList()){
+            if (r.getId().equals(id)){
+                old.remove(r);
+            }
+        }
+        EasyExcel.write(this.localExcelPath, Record.class).sheet().doWrite(old);
+        EasyExcel.read(this.localExcelPath, Record.class, this.recordListener).sheet().doRead();
+//        return
+    }
+
     public Record insert(Record r){
         List<Record> old=this.recordListener.getRecordList();
         old.add(r);
         EasyExcel.write(this.localExcelPath, Record.class).sheet().doWrite(old);
-        EasyExcel.read(this.localExcelPath, Record.class, this.recordListener).sheet().doRead();
+//        EasyExcel.read(this.localExcelPath, Record.class, this.recordListener).sheet().doRead();
         return r;
     }
 }
