@@ -12,11 +12,10 @@ import java.util.List;
 public class ExpertDao {
 
     private ExpertListener expertListener = new ExpertListener();
+    final private String localExcelPath = "";
 
     ExpertDao(){
-        String fileName = "C:/Users/hzlan/Desktop/1/expert.xlsx";
-        EasyExcel.read(fileName, Expert.class, this.expertListener).sheet().doRead();
-
+        EasyExcel.read(this.localExcelPath, Expert.class, this.expertListener).sheet().doRead();
     }
 
     public List<Expert >findAll(){
@@ -38,6 +37,10 @@ public class ExpertDao {
     }
 
     public Expert insert(Expert expert){
+        List<Expert> oldExperts = this.expertListener.getExpertList();
+        oldExperts.add(expert);
+        EasyExcel.write(this.localExcelPath, Expert.class).sheet().doWrite(oldExperts);
+        EasyExcel.read(this.localExcelPath, Expert.class, this.expertListener).sheet().doRead();
         return expert;
     }
 }
