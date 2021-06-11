@@ -3,21 +3,16 @@ package com.expertise.demo.entity;
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
-import javax.persistence.*;
 import java.util.Date;
 
 @Data
-@Entity
-@Table(name = "program")
 public class Program {
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
     @ExcelProperty("项目ID")
-    private Integer id;
+    private String id;
     @ExcelProperty("项目领域")
     private String area;
-    @ExcelProperty("项目类型")
-    private String type;
+    @ExcelProperty("项目密级")
+    private String secret;
     @ExcelProperty("项目简介")
     private String keyword;
     @ExcelProperty("项目时间")
@@ -31,9 +26,9 @@ public class Program {
 
     public Program(){}
 
-    public Program(String area,String type,String keyword,Date time,String company,int state,int number){
+    public Program(String area,String secret,String keyword,Date time,String company,int state,int number){
         this.area=area;
-        this.type=type;
+        this.secret=secret;
         this.company=company;
         this.keyword=keyword;
         this.number=number;

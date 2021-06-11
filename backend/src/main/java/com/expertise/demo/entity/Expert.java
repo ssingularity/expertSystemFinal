@@ -3,14 +3,10 @@ package com.expertise.demo.entity;
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
-import javax.persistence.*;
 import java.util.Date;
 
-@Entity
-@Table(name = "expert")
 @Data
 public class Expert {
-    @Id
     @ExcelProperty("专家身份证号")
     private String id;
     @ExcelProperty("专家姓名")

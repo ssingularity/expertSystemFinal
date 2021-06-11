@@ -9,6 +9,6 @@ public interface RecordService {
     Record update(Record record);
     Record findById(Integer id);
     List<Record> findByExpert(String eid);
-    List<Record> findByProgram(Integer pid);
+    List<Record> findByProgram(String pid);
     String delete(Integer id);
 }

@@ -27,6 +27,7 @@
                 ></el-table-column>
                 <el-table-column
                         prop="time"
+                        sortable
                         label="时间"
                 ></el-table-column>
                 <el-table-column

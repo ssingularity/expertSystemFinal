@@ -1,9 +1,9 @@
 package com.expertise.demo.service.serviceImpl;
 
+import com.expertise.demo.dao.ProgramDao;
 import com.expertise.demo.entity.Expert;
 import com.expertise.demo.entity.Program;
 import com.expertise.demo.entity.Record;
-import com.expertise.demo.repository.ProgramRepository;
 import com.expertise.demo.service.ExpertService;
 import com.expertise.demo.service.ProgramService;
 import com.expertise.demo.service.RecordService;
@@ -17,7 +17,7 @@ import java.util.Random;
 @Service
 public class ProgramServiceImpl implements ProgramService {
     @Autowired
-    private ProgramRepository programrepository;
+    private ProgramDao programdao;
 
     @Autowired
     private RecordService recordservice;
@@ -26,22 +26,22 @@ public class ProgramServiceImpl implements ProgramService {
     private ExpertService expertservice;
 
     public Program insert(Program program){
-        return programrepository.save(program);
+        return programdao.insert(program);
     }
 
 //    public Program
     public List<Program> findAll(){
-        return programrepository.findAll();
+        return programdao.findAll();
     }
 
     @Override
-    public Program findById(Integer id) {
-        return programrepository.findById(id);
+    public Program findById(String id) {
+        return programdao.findById(id);
     }
 
     @Override
-    public String autoChoose(Integer id) {
-        Program p = programrepository.findById(id);
+    public String autoChoose(String id) {
+        Program p = programdao.findById(id);
         List<Expert> experts=expertservice.findAll();
         List<Record> alreadyChose=recordservice.findByProgram(id);//get the number of experts chosen before
 

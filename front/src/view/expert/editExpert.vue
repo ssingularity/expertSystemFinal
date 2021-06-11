@@ -42,8 +42,9 @@
                     </el-col>
                     <el-col :span="6" style="align-items: end">
                         <el-form-item label="类型">
-                            <el-select v-model="type" clearable placeholder="请选择">
-                                <el-option label="专业" value="专业"></el-option>
+                            <el-select v-model="type" multiple clearable placeholder="请选择">
+                                <el-option label="技术" value="技术"></el-option>
+                                <el-option label="管理" value="管理"></el-option>
                                 <el-option label="财务" value="财务"></el-option>
                                 <el-option label="其他" value="其他"></el-option>
                             </el-select>
@@ -150,11 +151,11 @@
                 firstArea:'',
                 secondaryArea:'',
                 secretoptions: [{
-                    value: '一般',
-                    label: '一般'
+                    value: '秘密',
+                    label: '秘密'
                 }, {
-                    value: '重要',
-                    label: '重要'
+                    value: '机密',
+                    label: '机密'
                 }],
                 value: '',
                 secretFlag:'',

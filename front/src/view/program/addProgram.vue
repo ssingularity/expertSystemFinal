@@ -4,22 +4,41 @@
         <div style="margin-top: 10px">
             <el-form  label-width="100px">
                 <el-row :gutter="20">
-<!--                    <el-col :span="6">-->
-<!--                        <el-form-item label="项目名称">-->
-<!--                            <el-input v-model="name" ></el-input>-->
-<!--                        </el-form-item>-->
-<!--                    </el-col>-->
                     <el-col :span="4">
-                        <el-form-item label="专家数量">
-                            <el-input v-model="number" ></el-input>
+                        <el-form-item label="技术专家数量">
+                            <el-input v-model="numberTech" ></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="6" style="align-items: end">
-                        <el-form-item label="类型">
-                            <el-select v-model="type" clearable placeholder="请选择">
-                                <el-option label="专业" value="专业"></el-option>
-                                <el-option label="财务" value="财务"></el-option>
-                                <el-option label="其他" value="其他"></el-option>
+                    <el-col :span="4">
+                        <el-form-item label="管理专家数量">
+                            <el-input v-model="numberMng" ></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="4">
+                        <el-form-item label="财务专家数量">
+                            <el-input v-model="numberAcc" ></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                    <el-col :span="4">
+                        <el-form-item label="是否机密">
+                            <el-select v-model="secretFlag" @change="getService" placeholder="请选择">
+                                <el-option label="是" value="是"></el-option>
+                                <el-option label="否" value="否"></el-option>
+                                <!--                                <el-option label="其他" value=" "></el-option>-->
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="密级">
+                            <el-select v-model="secret" :disabled="secretshow" placeholder="请选择">
+                                <el-option
+                                        v-for="item in secretoptions"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -30,11 +49,18 @@
                 <el-button @click="addCompany" style="margin-left: 100px; margin-top: -10px; margin-bottom: 20px">增加单位</el-button>
                 <el-row :gutter="20">
                     <el-col :span="10">
-                        <el-form-item label="项目日期">
+                        <el-form-item label="评审时间">
+<!--                            <el-date-picker-->
+<!--                                    v-model="date"-->
+<!--                                    type="date"-->
+<!--                                    placeholder="选择日期">-->
+<!--                            </el-date-picker>-->
                             <el-date-picker
-                                    v-model="date"
-                                    type="date"
-                                    placeholder="选择日期">
+                                    v-model="time"
+                                    type="datetimerange"
+                                    range-separator="至"
+                                    start-placeholder="开始日期"
+                                    end-placeholder="结束日期">
                             </el-date-picker>
                         </el-form-item>
 <!--                        <el-form-item label="项目日期">-->
@@ -70,7 +96,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="9">
-                        <el-form-item label="描述">
+                        <el-form-item label="备注">
                             <el-input v-model="keyword" ></el-input>
                         </el-form-item>
                     </el-col>
@@ -93,48 +119,76 @@
             return{
                 id:'',
                     name:'',
-                    number:'',
+                    numberTech:'',
+                    numberMng:'',
+                    numberAcc:'',
                     company:'',
-                    type:'',
+                    secret:'',
                     area:'',
                     date:'',
+                    time:'',
                     keyword: '',
                     compNum: ["",],
+                secretoptions: [{
+                    value: '秘密',
+                    label: '秘密'
+                }, {
+                    value: '机密',
+                    label: '机密'
+                }],
+                secretFlag:'',
+                secretshow:''
             }
         },
         methods:{
+            getService(){
+                // this.secretFlag=!this.secretFlag;
+                if (this.secretFlag==='是') this.secretshow=false;
+                else {
+                    this.secretshow=true;
+                    this.secret=''
+                }
+                this.$forceUpdate()
+            },
             addCompany() {
               this.compNum.push("");
-              var compSum = ""
-              this.compNum.forEach((c) => {compSum += c + ", "})
-              this.company =compSum
+              var compSum = "";
+              this.compNum.forEach((c) => {compSum += c + ", "});
+              this.company =compSum;
               console.log(this.company)
             },
             resetForm(){
-                // this.birth='',
-                    this.name='',
-                    this.number='',
-                    this.company='',
-                    this.type='',
-                    this.area='',
-                    this.date='',
-                    this.keyword=''
+                    this.name='';
+                    this.numberTech='';
+                    this.numberMng='';
+                    this.numberAcc='';
+                    this.company='';
+                    this.time='',
+                    this.secret='';
+                    this.secretFlag='';
+                    this.secretshow='';
+                    this.area='';
+                    this.date='';
+                    this.keyword='';
                     this.compNum=["",]
             },
             submitForm(){
-              var compSum = ""
-              this.compNum.forEach((c) => {compSum += c + ", "})
+                let compSum = "";
+                this.compNum.forEach((c) => {compSum += c + ", "});
+                this.secret=this.secret.length?"不涉密":this.secret;
                 let data = {
                     name: this.name,
-                    number: this.number,
+                    numberTech:this.numberTech,
+                    numberMng:this.numberMng,
+                    numberAcc:this.numberAcc,
                     company: compSum,
-                    type: this.type,
                     area:this.area,
-                    time: this.date,
-                    keyword: this.keyword
-                }
-                console.log(data)
-                var url = 'http://localhost:8080/program/insert/'
+                    time: this.time,
+                    keyword: this.keyword,
+                    secret: this.secret
+                };
+                console.log(data);
+                const url = 'http://localhost:8080/program/insert/';
                 this.$http({
                     method: 'post',
                     url: url,
@@ -146,22 +200,22 @@
                     data: JSON.stringify(data)
                 })
                     .then(response => {
-                        console.log(response.data)
-                        this.id=response.data.id
-                        console.log('get response')
+                        console.log(response.data);
+                        this.id=response.data.id;
+                        console.log('get response');
                         //auto choose
                         this.$http.get('http://localhost:8080/program/auto/'+ this.id).then((res) => {
                             // this.tableData = res.data
-                            console.log(res.data)
+                            console.log(res.data);
                             if (res.data==="专家太少，自动选满缺少专家") alert("专家太少，自动选择缺少专家")
                         }).catch(function (err) {
                             alert(err)
-                        })
+                        });
                         //redirect
                         this.$router.push({path: '/programList'})
                     })
                     .catch(error => {
-                        JSON.stringify(error)
+                        JSON.stringify(error);
                         console.log(error)
                     })
 

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin(origins = {"http://localhost:8081","null"},allowCredentials = "true")
 @RestController
@@ -27,13 +26,13 @@ public class ProgramController {
     }
 
     @GetMapping(value = "/find/{id}")
-    public Program findById(@PathVariable(value = "id") Integer id)
+    public Program findById(@PathVariable(value = "id") String id)
     {
         return programservice.findById(id);
     }
 
     @GetMapping(value = "/auto/{id}")
-    public Integer autoChoose(@PathVariable(value = "id") Integer id){
+    public String autoChoose(@PathVariable(value = "id") String id){
 //        Program p=programservice.findById(id);
         programservice.autoChoose(id);
         return id;
