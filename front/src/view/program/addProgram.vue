@@ -14,12 +14,24 @@
                             <el-input v-model="number" ></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="6" style="align-items: end">
-                        <el-form-item label="类型">
-                            <el-select v-model="type" clearable placeholder="请选择">
-                                <el-option label="专业" value="专业"></el-option>
-                                <el-option label="财务" value="财务"></el-option>
-                                <el-option label="其他" value="其他"></el-option>
+                    <el-col :span="4">
+                        <el-form-item label="是否机密">
+                            <el-select v-model="secretFlag" @change="getService" placeholder="请选择">
+                                <el-option label="是" value="是"></el-option>
+                                <el-option label="否" value="否"></el-option>
+                                <!--                                <el-option label="其他" value=" "></el-option>-->
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="密级">
+                            <el-select v-model="secret" :disabled="secretshow" placeholder="请选择">
+                                <el-option
+                                        v-for="item in secretoptions"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -30,7 +42,7 @@
                 <el-button @click="addCompany" style="margin-left: 100px; margin-top: -10px; margin-bottom: 20px">增加单位</el-button>
                 <el-row :gutter="20">
                     <el-col :span="10">
-                        <el-form-item label="项目日期">
+                        <el-form-item label="评审时间">
                             <el-date-picker
                                     v-model="date"
                                     type="date"
@@ -70,7 +82,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="9">
-                        <el-form-item label="描述">
+                        <el-form-item label="备注">
                             <el-input v-model="keyword" ></el-input>
                         </el-form-item>
                     </el-col>
@@ -95,14 +107,32 @@
                     name:'',
                     number:'',
                     company:'',
-                    type:'',
+                    secret:'',
                     area:'',
                     date:'',
                     keyword: '',
                     compNum: ["",],
+                secretoptions: [{
+                    value: '秘密',
+                    label: '秘密'
+                }, {
+                    value: '机密',
+                    label: '机密'
+                }],
+                secretFlag:'',
+                secretshow:''
             }
         },
         methods:{
+            getService(){
+                // this.secretFlag=!this.secretFlag;
+                if (this.secretFlag==='是') this.secretshow=false
+                else {
+                    this.secretshow=true
+                    this.secret=''
+                }
+                this.$forceUpdate()
+            },
             addCompany() {
               this.compNum.push("");
               var compSum = ""
@@ -115,7 +145,9 @@
                     this.name='',
                     this.number='',
                     this.company='',
-                    this.type='',
+                    this.secret='',
+                    this.secretFlag='',
+                    this.secretshow='',
                     this.area='',
                     this.date='',
                     this.keyword=''
@@ -124,14 +156,15 @@
             submitForm(){
               var compSum = ""
               this.compNum.forEach((c) => {compSum += c + ", "})
+                this.secret=this.secret.length?"不涉密":this.secret
                 let data = {
                     name: this.name,
                     number: this.number,
                     company: compSum,
-                    type: this.type,
                     area:this.area,
                     time: this.date,
-                    keyword: this.keyword
+                    keyword: this.keyword,
+                    secret: this.secret
                 }
                 console.log(data)
                 var url = 'http://localhost:8080/program/insert/'
