@@ -16,10 +16,12 @@ public class Program {
     private String secret;
     @ExcelProperty("涉密程度")
     private String secretLevel;
-    @ExcelProperty("项目简介")
+    @ExcelProperty("项目备注")
     private String keyword;
-    @ExcelProperty("评审时间")
-    private Date time;
+    @ExcelProperty("评审开始时间")
+    private Date startTime;
+    @ExcelProperty("评审结束时间")
+    private Date endTime;
     @ExcelProperty("项目单位")
     private String company;
     @ExcelProperty("项目状态")

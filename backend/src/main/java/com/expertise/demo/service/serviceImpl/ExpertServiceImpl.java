@@ -15,10 +15,6 @@ public class ExpertServiceImpl implements ExpertService {
     @Autowired
     private ExpertDao expertdao;
 
-    public Expert insert(String name, String gender, Date birth,String phone,String type, String area, String intro, String company,String secret){
-        Expert expert=new Expert(name,gender,birth,phone,type,area,intro,company,secret);
-        return expertdao.insert(expert);
-    }
 
     public Expert insert(Expert expert){
         return expertdao.insert(expert);
