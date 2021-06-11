@@ -27,8 +27,10 @@ public class Record {
     private String secretLevel;
     @ExcelProperty("项目ID")
     private String programID;
-    @ExcelProperty("评审时间")
-    private Date time;
+    @ExcelProperty("评审开始时间")
+    private Date startTime;
+    @ExcelProperty("评审结束时间")
+    private Date endTime;
     @ExcelProperty("评价")
     private String comment;
     @ExcelProperty("分数")
