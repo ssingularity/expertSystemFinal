@@ -4,16 +4,23 @@
         <div style="margin-top: 10px">
             <el-form  label-width="100px">
                 <el-row :gutter="20">
-<!--                    <el-col :span="6">-->
-<!--                        <el-form-item label="项目名称">-->
-<!--                            <el-input v-model="name" ></el-input>-->
-<!--                        </el-form-item>-->
-<!--                    </el-col>-->
                     <el-col :span="4">
-                        <el-form-item label="专家数量">
-                            <el-input v-model="number" ></el-input>
+                        <el-form-item label="技术专家数量">
+                            <el-input v-model="numberTech" ></el-input>
                         </el-form-item>
                     </el-col>
+                    <el-col :span="4">
+                        <el-form-item label="管理专家数量">
+                            <el-input v-model="numberMng" ></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="4">
+                        <el-form-item label="财务专家数量">
+                            <el-input v-model="numberAcc" ></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="20">
                     <el-col :span="4">
                         <el-form-item label="是否机密">
                             <el-select v-model="secretFlag" @change="getService" placeholder="请选择">
@@ -43,10 +50,17 @@
                 <el-row :gutter="20">
                     <el-col :span="10">
                         <el-form-item label="评审时间">
+<!--                            <el-date-picker-->
+<!--                                    v-model="date"-->
+<!--                                    type="date"-->
+<!--                                    placeholder="选择日期">-->
+<!--                            </el-date-picker>-->
                             <el-date-picker
-                                    v-model="date"
-                                    type="date"
-                                    placeholder="选择日期">
+                                    v-model="time"
+                                    type="datetimerange"
+                                    range-separator="至"
+                                    start-placeholder="开始日期"
+                                    end-placeholder="结束日期">
                             </el-date-picker>
                         </el-form-item>
 <!--                        <el-form-item label="项目日期">-->
@@ -105,11 +119,14 @@
             return{
                 id:'',
                     name:'',
-                    number:'',
+                    numberTech:'',
+                    numberMng:'',
+                    numberAcc:'',
                     company:'',
                     secret:'',
                     area:'',
                     date:'',
+                    time:'',
                     keyword: '',
                     compNum: ["",],
                 secretoptions: [{
@@ -126,48 +143,52 @@
         methods:{
             getService(){
                 // this.secretFlag=!this.secretFlag;
-                if (this.secretFlag==='是') this.secretshow=false
+                if (this.secretFlag==='是') this.secretshow=false;
                 else {
-                    this.secretshow=true
+                    this.secretshow=true;
                     this.secret=''
                 }
                 this.$forceUpdate()
             },
             addCompany() {
               this.compNum.push("");
-              var compSum = ""
-              this.compNum.forEach((c) => {compSum += c + ", "})
-              this.company =compSum
+              var compSum = "";
+              this.compNum.forEach((c) => {compSum += c + ", "});
+              this.company =compSum;
               console.log(this.company)
             },
             resetForm(){
-                // this.birth='',
-                    this.name='',
-                    this.number='',
-                    this.company='',
-                    this.secret='',
-                    this.secretFlag='',
-                    this.secretshow='',
-                    this.area='',
-                    this.date='',
-                    this.keyword=''
+                    this.name='';
+                    this.numberTech='';
+                    this.numberMng='';
+                    this.numberAcc='';
+                    this.company='';
+                    this.time='',
+                    this.secret='';
+                    this.secretFlag='';
+                    this.secretshow='';
+                    this.area='';
+                    this.date='';
+                    this.keyword='';
                     this.compNum=["",]
             },
             submitForm(){
-              var compSum = ""
-              this.compNum.forEach((c) => {compSum += c + ", "})
-                this.secret=this.secret.length?"不涉密":this.secret
+                let compSum = "";
+                this.compNum.forEach((c) => {compSum += c + ", "});
+                this.secret=this.secret.length?"不涉密":this.secret;
                 let data = {
                     name: this.name,
-                    number: this.number,
+                    numberTech:this.numberTech,
+                    numberMng:this.numberMng,
+                    numberAcc:this.numberAcc,
                     company: compSum,
                     area:this.area,
-                    time: this.date,
+                    time: this.time,
                     keyword: this.keyword,
                     secret: this.secret
-                }
-                console.log(data)
-                var url = 'http://localhost:8080/program/insert/'
+                };
+                console.log(data);
+                const url = 'http://localhost:8080/program/insert/';
                 this.$http({
                     method: 'post',
                     url: url,
@@ -179,22 +200,22 @@
                     data: JSON.stringify(data)
                 })
                     .then(response => {
-                        console.log(response.data)
-                        this.id=response.data.id
-                        console.log('get response')
+                        console.log(response.data);
+                        this.id=response.data.id;
+                        console.log('get response');
                         //auto choose
                         this.$http.get('http://localhost:8080/program/auto/'+ this.id).then((res) => {
                             // this.tableData = res.data
-                            console.log(res.data)
+                            console.log(res.data);
                             if (res.data==="专家太少，自动选满缺少专家") alert("专家太少，自动选择缺少专家")
                         }).catch(function (err) {
                             alert(err)
-                        })
+                        });
                         //redirect
                         this.$router.push({path: '/programList'})
                     })
                     .catch(error => {
-                        JSON.stringify(error)
+                        JSON.stringify(error);
                         console.log(error)
                     })
 
