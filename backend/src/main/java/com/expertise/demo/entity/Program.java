@@ -3,17 +3,12 @@ package com.expertise.demo.entity;
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
-import javax.persistence.*;
 import java.util.Date;
 
 @Data
-@Entity
-@Table(name = "program")
 public class Program {
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
     @ExcelProperty("项目ID")
-    private Integer id;
+    private String id;
     @ExcelProperty("项目领域")
     private String area;
     @ExcelProperty("项目类型")

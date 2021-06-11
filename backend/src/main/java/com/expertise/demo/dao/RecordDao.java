@@ -1,12 +1,12 @@
 package com.expertise.demo.dao;
 
 import com.alibaba.excel.EasyExcel;
-import com.expertise.demo.entity.Expert;
-import com.expertise.demo.entity.Program;
 import com.expertise.demo.entity.Record;
 import com.expertise.demo.util.RecordListener;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,24 +14,29 @@ import java.util.List;
 public class RecordDao {
     private RecordListener recordListener=new RecordListener();
 
-    final private static String localExcelPath="C:/Users/hzlan/Desktop/1/record.xlsx";
+    @Value("${dao.record}")
+    private String localExcelPath;
 
-    RecordDao(){
-        EasyExcel.read(localExcelPath, Record.class,this.recordListener).sheet().doRead();
+    @PostConstruct
+    public void init() {
+        EasyExcel.read(this.localExcelPath, Record.class, this.recordListener).sheet().doRead();
     }
+
 
     public List<Record> findAll(){
         return this.recordListener.getRecordList();
     }
 
-    public List<Record> findById(Integer id){
-        List<Record> result=new ArrayList<>();
+    public Record findById(Integer id){
+//        List<Record> result=new ArrayList<>();
         for(Record r:this.recordListener.getRecordList()){
             if (r.getId().equals(id)){
-                result.add(r);
+//                result.add(r);
+                    return r;
             }
+
         }
-        return result;
+        return null;
     }
 
     public List<Record> findByExpertID(String id){
@@ -44,7 +49,7 @@ public class RecordDao {
         return result;
     }
 
-    public List<Record> findByProgramID(Integer Pid){
+    public List<Record> findByProgramID(String Pid){
         List<Record> result=new ArrayList<>();
         for(Record r:this.recordListener.getRecordList()){
             if (r.getProgramID().equals(Pid)){

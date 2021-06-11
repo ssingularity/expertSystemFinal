@@ -3,21 +3,16 @@ package com.expertise.demo.entity;
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
-import javax.persistence.*;
 import java.util.Date;
 
 @Data
-@Entity
-@Table(name = "meetingrecord")
 public class Record {
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
     @ExcelProperty("评审ID")
     private Integer id;
     @ExcelProperty("专家ID")
     private String expertID;
     @ExcelProperty("项目ID")
-    private Integer programID;
+    private String programID;
     @ExcelProperty("评审时间")
     private Date time;
     @ExcelProperty("评价")
@@ -39,14 +34,6 @@ public class Record {
 
     public void setExpertID(String expertID) {
         this.expertID = expertID;
-    }
-
-    public Integer getProgramID() {
-        return programID;
-    }
-
-    public void setProgramID(Integer programID) {
-        this.programID = programID;
     }
 
     public Date getTime() {
@@ -75,7 +62,7 @@ public class Record {
 
     public Record(){}
 
-    public Record(String expertID,Integer programID,Date time,String comment,int ontime){
+    public Record(String expertID,String programID,Date time,String comment,int ontime){
         this.comment=comment;
         this.expertID=expertID;
         this.programID=programID;

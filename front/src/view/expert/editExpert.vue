@@ -228,6 +228,8 @@
                    introduction:this.introduction,
                    birth: this.birth
                 }
+                //delete first
+
                 var url = 'http://localhost:8080/expert/insert/'
                 this.$http({
                     method: 'post',

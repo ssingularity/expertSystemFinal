@@ -1,6 +1,5 @@
 package com.expertise.demo.controller;
 
-import com.expertise.demo.entity.Expert;
 import com.expertise.demo.entity.Record;
 import com.expertise.demo.service.RecordService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +32,7 @@ public class RecordController {
     }
 
     @GetMapping(value = "/getP/{pid}")
-    public List<Record> findByProgram(@PathVariable(value = "pid") Integer pid)
+    public List<Record> findByProgram(@PathVariable(value = "pid") String pid)
     {
         return recordservice.findByProgram(pid);
     }
