@@ -7,33 +7,31 @@ import java.util.Date;
 
 @Data
 public class Program {
+
     @ExcelProperty("项目ID")
     private String id;
     @ExcelProperty("项目领域")
     private String area;
-    @ExcelProperty("项目密级")
+    @ExcelProperty("是否涉密项目")
     private String secret;
+    @ExcelProperty("涉密程度")
+    private String secretLevel;
     @ExcelProperty("项目简介")
     private String keyword;
-    @ExcelProperty("项目时间")
+    @ExcelProperty("评审时间")
     private Date time;
     @ExcelProperty("项目单位")
     private String company;
     @ExcelProperty("项目状态")
     private int state;
-    @ExcelProperty("项目所需专家数量")
-    private int number;
+    @ExcelProperty("技术专家数量")
+    private int numberTech;
+    @ExcelProperty("管理专家数量")
+    private int numberMng;
+    @ExcelProperty("财务专家数量")
+    private int numberAcc;
 
     public Program(){}
 
-    public Program(String area,String secret,String keyword,Date time,String company,int state,int number){
-        this.area=area;
-        this.secret=secret;
-        this.company=company;
-        this.keyword=keyword;
-        this.number=number;
-        this.time=time;
-        this.state=state;
-    }
 
 }

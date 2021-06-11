@@ -151,11 +151,14 @@
                 introduction:'',
                 birth:'',
                 secretoptions: [{
-                    value: '秘密',
-                    label: '秘密'
+                    value: '一般',
+                    label: '一般'
                 }, {
-                    value: '机密',
-                    label: '机密'
+                    value: '重要',
+                    label: '重要'
+                }, {
+                    value: '核心',
+                    label: '核心'
                 }],
                 value: '',
                 secretFlag:'',
