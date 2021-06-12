@@ -47,31 +47,22 @@
                   <el-input v-model="compNum[index]" ></el-input>
                 </el-form-item>
                 <el-button @click="addCompany" style="margin-left: 100px; margin-top: -10px; margin-bottom: 20px">增加单位</el-button>
-                <el-row :gutter="20">
-                    <el-col :span="10">
+                <el-row :gutter="5">
+                    <el-col :span="7">
                         <el-form-item label="评审时间">
-<!--                            <el-date-picker-->
-<!--                                    v-model="date"-->
-<!--                                    type="date"-->
-<!--                                    placeholder="选择日期">-->
-<!--                            </el-date-picker>-->
                             <el-date-picker
-                                    v-model="time"
-                                    type="datetimerange"
-                                    range-separator="至"
-                                    start-placeholder="开始日期"
-                                    end-placeholder="结束日期">
+                                    v-model="startTime"
+                                    type="datetime"
+                                    placeholder="选择开始时间">
                             </el-date-picker>
                         </el-form-item>
-<!--                        <el-form-item label="项目日期">-->
-<!--                        <el-date-picker-->
-<!--                                v-model="date"-->
-<!--                                type="datetimerange"-->
-<!--                                range-separator="至"-->
-<!--                                start-placeholder="开始日期"-->
-<!--                                end-placeholder="结束日期">-->
-<!--                        </el-date-picker>-->
-<!--                        </el-form-item>-->
+                    </el-col>
+                    <el-col span="5">
+                        <el-date-picker
+                                v-model="endTime"
+                                type="datetime"
+                                placeholder="选择结束时间">
+                        </el-date-picker>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="领域">
@@ -125,8 +116,8 @@
                     company:'',
                     secret:'',
                     area:'',
-                    date:'',
-                    time:'',
+                    startTime:'',
+                    endTime:'',
                     keyword: '',
                     compNum: ["",],
                 secretoptions: [{
@@ -135,6 +126,9 @@
                 }, {
                     value: '机密',
                     label: '机密'
+                }, {
+                    value: '绝密',
+                    label: '绝密'
                 }],
                 secretFlag:'',
                 secretshow:''
@@ -163,12 +157,12 @@
                     this.numberMng='';
                     this.numberAcc='';
                     this.company='';
-                    this.time='',
+                    this.endTime='';
+                    this.startTime='';
                     this.secret='';
                     this.secretFlag='';
                     this.secretshow='';
                     this.area='';
-                    this.date='';
                     this.keyword='';
                     this.compNum=["",]
             },
@@ -183,7 +177,8 @@
                     numberAcc:this.numberAcc,
                     company: compSum,
                     area:this.area,
-                    time: this.time,
+                    startTime: this.time,
+                    endTime:this.startTime,
                     keyword: this.keyword,
                     secret: this.secret
                 };
