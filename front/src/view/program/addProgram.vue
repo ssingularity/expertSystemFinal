@@ -46,7 +46,17 @@
                 <el-form-item label="单位" v-for="(val, index) in compNum" :key="index">
                   <el-input v-model="compNum[index]" ></el-input>
                 </el-form-item>
-                <el-button @click="addCompany" style="margin-left: 100px; margin-top: -10px; margin-bottom: 20px">增加单位</el-button>
+                <el-button @click="addCompany" style="margin-left: 100px; margin-top: -10px; margin-bottom: 20px">增加单位</el-button><br>
+              <div style="margin-left: 100px; margin-top: -10px; margin-bottom: 20px">
+              <p>批量导入单位</p>
+                <input
+                    ref="upload"
+                    type="file"
+                    accept=".xls,.xlsx"
+                    class="upload_file"
+                    @change="readExcel($event)"
+                />
+              </div>
                 <el-row :gutter="20">
                     <el-col :span="10">
                         <el-form-item label="评审时间">
@@ -111,7 +121,8 @@
 </template>
 
 <script>
-    import navi from "../../components/navi";
+import navi from "../../components/navi";
+import XLSX from "xlsx";
     export default {
         name: "add",
         components: {navi},
@@ -128,7 +139,7 @@
                     date:'',
                     time:'',
                     keyword: '',
-                    compNum: ["",],
+                    compNum: [""],
                 secretoptions: [{
                     value: '秘密',
                     label: '秘密'
@@ -219,7 +230,41 @@
                         console.log(error)
                     })
 
+            },
+          readExcel(e) {
+
+            console.log("call")
+            let that = this;
+            const files = e.target.files;
+            if (files.length <= 0) {
+              return false;
+            } else if (!/\.(xls|xlsx)$/.test(files[0].name.toLowerCase())) {
+              alert("上传格式不正确，请上传xls或者xlsx格式")
+              return false;
+            } else {
+              that.upload_file = files[0].name;
             }
+            const fileReader = new FileReader();
+            fileReader.onload = ev => {
+              try {
+                const data = ev.target.result;
+                const workbook = XLSX.read(data, {
+                  type: "binary"
+                });
+                const wsname = workbook.SheetNames[0]; //取第一张表
+                const ws = XLSX.utils.sheet_to_json(workbook.Sheets[wsname]); //生成json表格内容
+                var li = []
+                for (var company in ws) {
+                  li.push(Object.values(ws[company])[0])
+                }
+                console.log(li)
+                that.compNum = li;
+              } catch (e) {
+                return false;
+              }
+            };
+            fileReader.readAsBinaryString(files[0]);
+          }
         }
     }
 </script>
