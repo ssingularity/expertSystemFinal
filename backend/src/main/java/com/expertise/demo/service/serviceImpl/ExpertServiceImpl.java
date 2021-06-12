@@ -28,10 +28,22 @@ public class ExpertServiceImpl implements ExpertService {
     public List<Expert> findByName(String name){
         return expertdao.findByName(name);
     }
+    public List<Expert> findByBlocked(Boolean blocked){
+        return expertdao.findByBlocked(blocked);
+    }
 
     @Override
     public Expert findById(String id) {
-
         return expertdao.findById(id);
+    }
+
+    @Override
+    public void blockById(String id) {
+        expertdao.blockById(id);
+    }
+
+    @Override
+    public void unblockById(String id) {
+        expertdao.unblockById(id);
     }
 }
