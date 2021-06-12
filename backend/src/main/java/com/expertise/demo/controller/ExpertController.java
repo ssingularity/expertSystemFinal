@@ -42,6 +42,12 @@ public class ExpertController {
         return expertservice.findAll();
     }
 
+    @GetMapping(value = "/get_blocked")
+    public List<Expert> findAllBlocked()
+    {
+        return expertservice.findByBlocked(Boolean.TRUE);
+    }
+
     @GetMapping(value = "/find/{name}")
     public List<Expert> findByName(@PathVariable(value = "name") String name)
     {
@@ -52,5 +58,17 @@ public class ExpertController {
     public Expert findById(@PathVariable(value = "id") String id)
     {
         return expertservice.findById(id);
+    }
+
+    @GetMapping(value = "/block/{id}")
+    public void blockById(@PathVariable(value = "id") String id)
+    {
+        expertservice.blockById(id);
+    }
+
+    @GetMapping(value = "/unblock/{id}")
+    public void unblockById(@PathVariable(value = "id") String id)
+    {
+        expertservice.unblockById(id);
     }
 }

@@ -52,6 +52,37 @@ public class ExpertDao {
         return result;
     }
 
+    public List<Expert> findByBlocked(Boolean blocked) {
+        List<Expert> result=new ArrayList<>();
+        for(Expert e:this.expertListener.getExpertList()){
+            if (e.getIsBlocked() == blocked){
+                result.add(e);
+            }
+        }
+        return result;
+    }
+
+    public void blockById(String id) {
+        List<Expert> oldExperts = this.expertListener.getExpertList();
+        for (Expert e: oldExperts) {
+            if (e.getId().equals(id)) {
+                e.setIsBlocked(Boolean.TRUE);
+            }
+        }
+        EasyExcel.write(this.localExcelPath, Expert.class).sheet().doWrite(oldExperts);
+    };
+
+    public void unblockById(String id) {
+        List<Expert> oldExperts = this.expertListener.getExpertList();
+        for (Expert e: oldExperts) {
+            if (e.getId().equals(id)) {
+                e.setIsBlocked(Boolean.FALSE);
+            }
+        }
+        EasyExcel.write(this.localExcelPath, Expert.class).sheet().doWrite(oldExperts);
+    };
+
+
     public Expert insert(Expert expert){
         List<Expert> oldExperts = this.expertListener.getExpertList();
         oldExperts.add(expert);
