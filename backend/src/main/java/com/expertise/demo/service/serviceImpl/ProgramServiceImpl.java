@@ -40,10 +40,16 @@ public class ProgramServiceImpl implements ProgramService {
     }
 
     @Override
-    public String autoChoose(String id) {
+    public String autoChoose(String id) {//是否秘密，排除拉黑，三类匹配
         Program p = programdao.findById(id);
         List<Expert> experts=expertservice.findAll();
         List<Record> alreadyChose=recordservice.findByProgram(id);//get the number of experts chosen before
+
+        for (Record record:alreadyChose) {
+            experts.removeIf(e -> e.getId().equals(record.getExpertID()));
+            experts.removeIf(e -> !e.getSecret().equals(record.getSecret()));
+
+        }
 
         //是否有财务了？
         boolean hasAccount=false;
@@ -97,6 +103,11 @@ public class ProgramServiceImpl implements ProgramService {
 //            return "专家太少，自动选满缺少专家";
 //        }else return "success";
         return "success";
+    }
+
+    @Override
+    public void changeState(String id) {
+        programdao.changeState(id);
     }
 
 

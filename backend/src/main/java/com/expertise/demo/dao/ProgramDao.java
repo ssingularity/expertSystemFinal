@@ -43,4 +43,12 @@ public class ProgramDao {
         EasyExcel.write(this.localExcelPath, Program.class).sheet().doWrite(old);
         return p;
     }
+
+    public void changeState(String id){
+        for(Program p:this.programListener.getProgramlist()){
+            if (p.getId().equals(id)){
+                p.setState(1);
+            }
+        }
+    }
 }
