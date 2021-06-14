@@ -197,13 +197,14 @@
                     name: this.name,
                     phone: this.phone,
                    gender: this.gender,
-                   secret: this.secret,
+                   secret: this.secretFlag,
+                   secretLevel: this.secret,
                    company:this.company,
                    type: this.type,
                    area:this.area,
                    introduction:this.introduction,
-                   birth: this.birth
                 }
+                console.log(data);
                 var url = 'http://localhost:8080/expert/insert/'
                 this.$http({
                     method: 'post',

@@ -6,7 +6,7 @@
                 <el-aside width="200px">
                     <p class="content" > <span style="font-weight: bold">姓名:</span>{{name}}<br/></p>
                     <p class="content" > <span style="font-weight: bold">性别：</span>{{gender}}<br/></p>
-                    <p class="content" ><span style="font-weight: bold">年龄：</span>{{age}}<br/></p>
+<!--                    <p class="content" ><span style="font-weight: bold">年龄：</span>{{age}}<br/></p>-->
                     <p class="content" ><span style="font-weight: bold">类型:</span>{{type}}<br/></p>
                     <p class="content" ><span style="font-weight: bold">领域:</span>{{area}}<br/></p>
                     <p class="content" ><span style="font-weight: bold">单位:</span>{{company}}<br/></p>

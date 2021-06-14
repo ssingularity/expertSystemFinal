@@ -12,4 +12,5 @@ public interface ExpertService {
      Expert findById(String id);
      void blockById(String id);
      void unblockById(String id);
+     void deleteById(String id);
 }

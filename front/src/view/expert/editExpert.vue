@@ -219,6 +219,20 @@
             },
             submitForm(){
                 // let that = this
+                url = 'http://localhost:8080/expert/delete' + this.$route.query.id;
+                this.$http({
+                    method: 'delete',
+                    url: url,
+                    headers: {
+                        'Access-Control-Allow-Credentials': true,
+                        'Access-Control-Allow-Origin': true
+                    }
+                }).then(response => {
+                        console.log(response.data)
+                    }).catch(error => {
+                        JSON.stringify(error);
+                        console.log(error)
+                    });
                 this.area=this.firstArea+','+this.secondaryArea
                let data = {
                    id:this.$route.query.id,

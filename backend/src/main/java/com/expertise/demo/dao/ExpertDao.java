@@ -91,7 +91,7 @@ public class ExpertDao {
         return expert;
     }
 
-    public void deleteById(Integer id){
+    public void deleteById(String id){
         List<Expert> old=this.expertListener.getExpertList();
         for(Expert e:this.expertListener.getExpertList()){
             if (e.getId().equals(id)){

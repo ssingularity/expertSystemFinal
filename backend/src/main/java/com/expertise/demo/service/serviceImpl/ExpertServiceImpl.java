@@ -6,7 +6,6 @@ import com.expertise.demo.service.ExpertService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -22,7 +21,6 @@ public class ExpertServiceImpl implements ExpertService {
 
     public List <Expert> findAll(){
         return expertdao.findAll();
-//        return expertrepository.findAll();
     }
 
     public List<Expert> findByName(String name){
@@ -45,5 +43,10 @@ public class ExpertServiceImpl implements ExpertService {
     @Override
     public void unblockById(String id) {
         expertdao.unblockById(id);
+    }
+
+    @Override
+    public void deleteById(String id) {
+        expertdao.deleteById(id);
     }
 }

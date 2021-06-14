@@ -22,11 +22,11 @@
                         label="性别"
                         width="50"
                 ></el-table-column>
-                <el-table-column
-                        prop="birth"
-                        label="生日"
-                        sortable
-                ></el-table-column>
+<!--                <el-table-column-->
+<!--                        prop="birth"-->
+<!--                        label="生日"-->
+<!--                        sortable-->
+<!--                ></el-table-column>-->
                 <el-table-column
                         prop="phone"
                         label="电话"

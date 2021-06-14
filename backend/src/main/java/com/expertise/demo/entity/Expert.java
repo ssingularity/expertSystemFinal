@@ -198,4 +198,17 @@ public class Expert {
 
     public Expert(){}
 
+    public Expert(String id, String name, String gender, String phone, String type, String area, String introduction, String company, String secret, String secretLevel) {
+        this.area=area;
+        this.introduction=introduction;
+        this.name=name;
+        this.id=id;
+        this.phone=phone;
+        this.company=company;
+        this.gender=gender;
+        this.secret=secret;
+        this.secretLevel=secretLevel;
+        this.type=type;
+    }
+
 }
