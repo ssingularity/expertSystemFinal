@@ -11,17 +11,13 @@
                     <p class="content" > <span style="font-weight: bold">时间：</span>{{time}}<br/></p>
                     <p class="content" ><span style="font-weight: bold">所需人数：</span>{{number}}<br/></p>
                     <p class="content" ><span style="font-weight: bold">状态：</span>{{state}}<br/></p>
-                    <el-row style="margin: 10px"><el-button type="primary" round @click="edit">结束项目</el-button></el-row>
+                    <el-row style="margin: 10px"><el-button type="primary" round @click="end">结束项目</el-button></el-row>
                 </el-aside>
                 <el-main>
                     <el-table :data="tableData"
                               stripe
                               style="width: 100%">
                         <el-table-column>
-                            <!--<template slot="header"  scope="scope" >-->
-                            <!--<el-input v-model="search" style="width: 300px"-->
-                            <!--placeholder="请输入书名" prefix-icon="el-icon-search"/>-->
-                            <!--</template>-->
                             <el-table-column
                                     prop="id"
                                     label="ID"
@@ -44,10 +40,6 @@
                                     prop="ontime"
                                     label="分数"
                             ></el-table-column>
-                            <!--                            <el-table-column-->
-                            <!--                                    prop="type"-->
-                            <!--                                    label="类型"-->
-                            <!--                            ></el-table-column>-->
                             <el-table-column
                                     fixed="right"
                                     label="操作"
@@ -249,9 +241,12 @@
                     alert(err)
                 })
             },
-            edit(){
-                this.$router.push({path: '/editExpert'})
-                
+            end(){
+                var url = 'http://localhost:8080/program/changeState/' + this.$route.query.id
+                this.$http.get(url).then(() => {
+                }).catch(function (err) {
+                    alert(err)
+                })
 
             },
             handleComment(row){

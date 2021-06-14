@@ -67,8 +67,14 @@
                 this.$http.get('http://localhost:8080/program/get_all').then((res) => {
                     this.tableData = res.data
                     for (var i = 0; i < this.tableData.length; i++) {
-                        var d = new Date(this.tableData[i].time)
-                        this.tableData[i].time = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() //+ ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds()
+                        this.tableData[i].number=this.tableData[i].numberAcc+this.tableData[i].numberMng+this.tableData[i].numberTech;
+                        if (this.tableData[i].state){
+                            this.endProgram.push(this.tableData[i]);
+                            // this.endProgram.
+                            this.tableData.sort(this.tableData[i].state)//直接用state排序？或者看下数组怎么删除
+                        }
+                        var d = new Date(this.tableData[i].startTime)
+                        this.tableData[i].startTime = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() //+ ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds()
                     }
                     console.log(res)
                 }).catch(function (err) {
@@ -89,7 +95,8 @@
         },
         data(){
             return{
-                tableData:[]
+                tableData:[],
+                endProgram:[]
             }
         }
     }

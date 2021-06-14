@@ -33,9 +33,13 @@ public class ProgramController {
 
     @GetMapping(value = "/auto/{id}")
     public String autoChoose(@PathVariable(value = "id") String id){
-//        Program p=programservice.findById(id);
         programservice.autoChoose(id);
         return id;
+    }
+
+    @GetMapping(value = "/endProgram/{id}")
+    public void endProgram(@PathVariable(value = "id") String id){
+         programservice.changeState(id);
     }
 //    @DeleteMapping(value = "/delete")
 //    public String delete(Integer id){

@@ -9,4 +9,5 @@ public interface ProgramService {
     List<Program> findAll();
     Program findById(String id);
     String autoChoose(String id);
+    void changeState(String id);
 }
