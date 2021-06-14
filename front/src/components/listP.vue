@@ -8,10 +8,10 @@
                 <!--<el-input v-model="search" style="width: 300px"-->
                 <!--placeholder="请输入书名" prefix-icon="el-icon-search"/>-->
                 <!--</template>-->
-                <el-table-column
-                        prop="id"
-                        label="项目编号"
-                >
+<!--                <el-table-column-->
+<!--                        prop="id"-->
+<!--                        label="项目编号"-->
+<!--                >-->
                 </el-table-column>
                 <el-table-column
                         prop="area"
@@ -23,16 +23,12 @@
                 ></el-table-column>
                 <el-table-column
                         prop="keyword"
-                        label="描述"
+                        label="备注"
                 ></el-table-column>
                 <el-table-column
-                        prop="time"
+                        prop="startTime"
                         sortable
                         label="时间"
-                ></el-table-column>
-                <el-table-column
-                        prop="company"
-                        label="单位"
                 ></el-table-column>
                 <el-table-column
                         prop="state"
@@ -55,7 +51,7 @@
 <!--                        <el-button round @click="handleDelete(scope.row)" size="small">删除</el-button>-->
                     </template>
                 </el-table-column>
-            </el-table-column>
+<!--            </el-table-column>-->
         </el-table>
     </div>
 </template>
@@ -71,8 +67,6 @@
                 this.$http.get('http://localhost:8080/program/get_all').then((res) => {
                     this.tableData = res.data
                     for (var i = 0; i < this.tableData.length; i++) {
-                        // if (this.tableData[i].secret) this.tableData[i].secret='机密'
-                        // else this.tableData[i].secret='非机密'
                         var d = new Date(this.tableData[i].time)
                         this.tableData[i].time = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() //+ ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds()
                     }

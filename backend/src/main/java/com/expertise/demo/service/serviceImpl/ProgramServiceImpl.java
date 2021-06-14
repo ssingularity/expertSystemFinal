@@ -53,7 +53,8 @@ public class ProgramServiceImpl implements ProgramService {
             }
             experts.removeIf(e -> e.getId().equals(record.getExpertID()));
         }
-        int neednum=hasAccount?p.getNumber():p.getNumber()-1;//没有财务的少找一个专家
+//        int neednum=hasAccount?p.getNumber():p.getNumber()-1;//没有财务的少找一个专家
+        int neednum=p.getNumberAcc();
         //找合适的专家 insert record
         List<Expert> candidates=new ArrayList<>();
         for (Expert e:experts) {
@@ -69,7 +70,8 @@ public class ProgramServiceImpl implements ProgramService {
             String EId=candidates.get(rd.nextInt(candidates.size()-1)).getId();
 //            String EId=experts.get(i).getId();
             record.setExpertID(EId);
-            record.setTime(p.getTime());
+            record.setEndTime(p.getEndTime());
+            record.setStartTime(p.getStartTime());
             recordservice.insert(record);
         }
         if (!hasAccount){
@@ -86,13 +88,15 @@ public class ProgramServiceImpl implements ProgramService {
             Random rd=new Random(System.currentTimeMillis());
             String EId=accounts.get(rd.nextInt(accounts.size()-1)).getId();
             record.setExpertID(EId);
-            record.setTime(p.getTime());
+            record.setEndTime(p.getEndTime());
+            record.setStartTime(p.getStartTime());
             recordservice.insert(record);
         }
-        if (recordservice.findByProgram(id).size()<p.getNumber()){
-            //没选满
-            return "专家太少，自动选满缺少专家";
-        }else return "success";
+//        if (recordservice.findByProgram(id).size()<p.getNumber()){
+//            //没选满
+//            return "专家太少，自动选满缺少专家";
+//        }else return "success";
+        return "success";
     }
 
 

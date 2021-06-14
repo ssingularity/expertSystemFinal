@@ -11,7 +11,7 @@
                     <p class="content" > <span style="font-weight: bold">时间：</span>{{time}}<br/></p>
                     <p class="content" ><span style="font-weight: bold">所需人数：</span>{{number}}<br/></p>
                     <p class="content" ><span style="font-weight: bold">状态：</span>{{state}}<br/></p>
-<!--                    <el-row style="margin: 10px"><el-button type="primary" round @click="edit">修改信息</el-button></el-row>-->
+                    <el-row style="margin: 10px"><el-button type="primary" round @click="edit">结束项目</el-button></el-row>
                 </el-aside>
                 <el-main>
                     <el-table :data="tableData"
@@ -251,6 +251,7 @@
             },
             edit(){
                 this.$router.push({path: '/editExpert'})
+                
 
             },
             handleComment(row){
