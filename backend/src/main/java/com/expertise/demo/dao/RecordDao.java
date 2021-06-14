@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public class RecordDao {
@@ -59,19 +60,16 @@ public class RecordDao {
         return result;
     }
 
-    public void deleteById(Integer id){
+    public void deleteById(String id){
         List<Record> old=this.recordListener.getRecordList();
-        for(Record r:this.recordListener.getRecordList()){
-            if (r.getId().equals(id)){
-                old.remove(r);
-            }
-        }
+        old.removeIf(r -> r.getId().equals(id));
         EasyExcel.write(this.localExcelPath, Record.class).sheet().doWrite(old);
-        EasyExcel.read(this.localExcelPath, Record.class, this.recordListener).sheet().doRead();
+//        EasyExcel.read(this.localExcelPath, Record.class, this.recordListener).sheet().doRead();
 //        return
     }
 
     public Record insert(Record r){
+        r.setId(UUID.randomUUID().toString()+r.getExpertID());
         List<Record> old=this.recordListener.getRecordList();
         old.add(r);
         EasyExcel.write(this.localExcelPath, Record.class).sheet().doWrite(old);

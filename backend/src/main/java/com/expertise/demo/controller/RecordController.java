@@ -44,7 +44,7 @@ public class RecordController {
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    public String delete(@PathVariable(value = "id") Integer id){
+    public String delete(@PathVariable(value = "id") String id){
         return recordservice.delete(id);
     }
 

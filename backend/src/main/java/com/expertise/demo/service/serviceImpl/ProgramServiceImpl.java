@@ -64,7 +64,7 @@ public class ProgramServiceImpl implements ProgramService {
         }
         List<Expert> manageCandidate=new ArrayList<>(),techCandidate=new ArrayList<>(),accCandidate=new ArrayList<>();
         for (Expert e:experts) {
-            if (e.getArea().contains(p.getArea())&&(!e.getCompany().contains(p.getCompany()))){//排除单位，已选择的，匹配专业
+            if (e.getArea().contains(p.getArea())&&(!p.getCompany().contains(e.getCompany()))){//排除单位，已选择的，匹配专业
                 switch (e.getType()) {
                     case "技术":
                         techCandidate.add(e);
@@ -158,6 +158,7 @@ public class ProgramServiceImpl implements ProgramService {
         record.setEndTime(p.getEndTime());
         record.setStartTime(p.getStartTime());
         recordservice.insert(record);
+        System.out.println(e.getName());
     }
 
     @Override

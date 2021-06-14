@@ -4,51 +4,77 @@
                   stripe
                   style="width: 100%">
             <el-table-column>
-                <!--<template slot="header"  scope="scope" >-->
-                <!--<el-input v-model="search" style="width: 300px"-->
-                <!--placeholder="请输入书名" prefix-icon="el-icon-search"/>-->
-                <!--</template>-->
                 <el-table-column
-                        prop="id"
-                        label="ID"
-                >
-                </el-table-column>
-                <el-table-column
+                        prop="company"
+                        label="工作单位"
+                ></el-table-column>
+                    <el-table-column
                         prop="name"
                         label="姓名"
                 ></el-table-column>
                 <el-table-column
+                        prop="id"
+                        label="身份证号"
+                ></el-table-column>
+                <el-table-column
                         prop="gender"
                         label="性别"
-                        width="50"
                 ></el-table-column>
-<!--                <el-table-column-->
-<!--                        prop="birth"-->
-<!--                        label="生日"-->
-<!--                        sortable-->
-<!--                ></el-table-column>-->
                 <el-table-column
-                        prop="phone"
-                        label="电话"
+                        prop="jobPosition"
+                        label="职务"
                 ></el-table-column>
+                <el-table-column
+                        prop="jobTitle"
+                        label="职称"
+                >
+                </el-table-column>
                 <el-table-column
                         prop="type"
-                        label="类型"
+                        label="专家类型"
                 ></el-table-column>
                 <el-table-column
                         prop="area"
-                        label="领域"
+                        label="行业领域"
                 ></el-table-column>
                 <el-table-column
-                        prop="company"
-                        label="单位"
-                        width="200"
+                        prop="phone"
+                        label="手机"
                 ></el-table-column>
                 <el-table-column
                         prop="secret"
-                        label="是否机密"
+                        label="是否涉密人员"
+                ></el-table-column>
+                <el-table-column
+                        prop="secretLevel"
+                        label="涉密程度"
+                ></el-table-column>
+                <el-table-column
+                        prop="address"
+                        label="通讯地址"
+                        width="200"
+                ></el-table-column>
+                <el-table-column
+                        prop="postcode"
+                        label="邮编"
                         width="50"
                 ></el-table-column>
+                    <el-table-column
+                            prop="recommendCompany"
+                            label="推荐单位"
+                    ></el-table-column>
+                    <el-table-column
+                            prop="filler"
+                            label="填报人"
+                    ></el-table-column>
+                    <el-table-column
+                            prop="fillerContact"
+                            label="填报人联系方式"
+                    ></el-table-column>
+                    <el-table-column
+                            prop="isBlocked"
+                            label="是否被拉黑"
+                    ></el-table-column>
                 <el-table-column
                         fixed="right"
                         label="操作"

@@ -10,5 +10,5 @@ public interface RecordService {
     Record findById(Integer id);
     List<Record> findByExpert(String eid);
     List<Record> findByProgram(String pid);
-    String delete(Integer id);
+    String delete(String id);
 }

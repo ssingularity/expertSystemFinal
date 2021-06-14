@@ -32,8 +32,16 @@
                                     label="项目编号"
                             ></el-table-column>
                             <el-table-column
-                                    prop="time"
-                                    label="时间"
+                                    prop="secret"
+                                    label="是否涉密项目"
+                            ></el-table-column>
+                            <el-table-column
+                                    prop="secretLevel"
+                                    label="涉密程度"
+                            ></el-table-column>
+                            <el-table-column
+                                    prop="startTime"
+                                    label="评审开始时间"
                             ></el-table-column>
                             <el-table-column
                                     prop="comment"
@@ -41,22 +49,18 @@
                                     width="400"
                             ></el-table-column>
                             <el-table-column
-                                    prop="ontime"
+                                    prop="score"
                                     label="分数"
                             ></el-table-column>
 <!--                            <el-table-column-->
-<!--                                    prop="type"-->
-<!--                                    label="类型"-->
-<!--                            ></el-table-column>-->
-                            <el-table-column
-                                    fixed="right"
-                                    label="操作"
-                                    width="150">
-                                <template slot-scope="scope">
-                                    <el-button round size="small" @click="handleComment(scope.row)" >评价</el-button>
-                                    <el-button round size="small" @click="handleDelete(scope.row)">删除</el-button>
-                                </template>
-                            </el-table-column>
+<!--                                    fixed="right"-->
+<!--                                    label="操作"-->
+<!--                                    width="150">-->
+<!--                                <template slot-scope="scope">-->
+<!--                                    <el-button round size="small" @click="handleComment(scope.row)" >评价</el-button>-->
+<!--                                    <el-button round size="small" @click="handleDelete(scope.row)">删除</el-button>-->
+<!--                                </template>-->
+<!--                            </el-table-column>-->
                         </el-table-column>
                     </el-table>
                     <el-dialog title="输入评价" :visible.sync="dialogVisible">

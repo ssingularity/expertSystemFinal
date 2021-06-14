@@ -180,7 +180,7 @@ import XLSX from "xlsx";
             submitForm(){
                 let compSum = "";
                 this.compNum.forEach((c) => {compSum += c + ", "});
-                this.secret=this.secret.length?"不涉密":this.secret;
+                // this.secret=this.secret.length?"否":this.secret;
                 let data = {
                     name: this.name,
                     numberTech:this.numberTech,
@@ -188,10 +188,11 @@ import XLSX from "xlsx";
                     numberAcc:this.numberAcc,
                     company: compSum,
                     area:this.area,
-                    startTime: this.time,
-                    endTime:this.startTime,
+                    startTime: this.startTime,
+                    endTime:this.endTime,
                     keyword: this.keyword,
-                    secret: this.secret
+                    secret: this.secretFlag,
+                    secretLevel: this.secret
                 };
                 console.log(data);
                 const url = 'http://localhost:8080/program/insert/';

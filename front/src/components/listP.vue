@@ -18,10 +18,6 @@
                         label="领域"
                 ></el-table-column>
                 <el-table-column
-                        prop="type"
-                        label="类型"
-                ></el-table-column>
-                <el-table-column
                         prop="keyword"
                         label="备注"
                 ></el-table-column>
@@ -31,6 +27,7 @@
                         label="时间"
                 ></el-table-column>
                 <el-table-column
+                        sortable
                         prop="state"
                         label="状态"
                 ></el-table-column>

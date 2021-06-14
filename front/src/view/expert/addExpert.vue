@@ -200,7 +200,7 @@
                    secret: this.secretFlag,
                    secretLevel: this.secret,
                    company:this.company,
-                   type: this.type,
+                   type: this.type.toString(),
                    area:this.area,
                    introduction:this.introduction,
                 }

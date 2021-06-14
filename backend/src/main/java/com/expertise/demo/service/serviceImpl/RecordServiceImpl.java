@@ -44,7 +44,7 @@ public class RecordServiceImpl implements RecordService {
         return recorddao.findByProgramID(pid);
     }
 
-    public String delete(Integer id){
+    public String delete(String id){
         recorddao.deleteById(id);
          return "success";
     }

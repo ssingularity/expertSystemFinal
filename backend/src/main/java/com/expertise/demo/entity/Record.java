@@ -8,7 +8,7 @@ import java.util.Date;
 @Data
 public class Record {
     @ExcelProperty("评审ID")
-    private Integer id;
+    private String id;
     @ExcelProperty("专家身份证")
     private String expertID;
     @ExcelProperty("专家姓名")
@@ -37,6 +37,5 @@ public class Record {
     private int score;
 
     public Record(){}
-
 
 }

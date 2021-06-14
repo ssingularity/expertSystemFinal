@@ -33,8 +33,7 @@ public class ProgramController {
 
     @GetMapping(value = "/auto/{id}")
     public String autoChoose(@PathVariable(value = "id") String id){
-        programservice.autoChoose(id);
-        return id;
+        return programservice.autoChoose(id);
     }
 
     @GetMapping(value = "/endProgram/{id}")

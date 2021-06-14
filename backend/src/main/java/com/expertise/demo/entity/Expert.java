@@ -36,7 +36,7 @@ public class Expert {
     @ExcelProperty("邮编")
     private String postcode;
     @ExcelProperty("推荐单位")
-    private String recommendComapny;
+    private String recommendCompany;
     @ExcelProperty("填报人")
     private String filler;
     @ExcelProperty("填报人联系方式")
@@ -164,12 +164,12 @@ public class Expert {
         this.postcode = postcode;
     }
 
-    public String getRecommendComapny() {
-        return recommendComapny;
+    public String getRecommendCompany() {
+        return recommendCompany;
     }
 
-    public void setRecommendComapny(String recommendComapny) {
-        this.recommendComapny = recommendComapny;
+    public void setRecommendCompany(String recommendCompany) {
+        this.recommendCompany = recommendCompany;
     }
 
     public String getFiller() {

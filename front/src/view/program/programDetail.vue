@@ -4,7 +4,6 @@
         <div style="margin-top: 30px">
             <el-container>
                 <el-aside width="200px">
-                    <p class="content" ><span style="font-weight: bold">类型:</span>{{type}}<br/></p>
                     <p class="content" ><span style="font-weight: bold">领域:</span>{{area}}<br/></p>
                     <p class="content" ><span style="font-weight: bold">单位:</span>{{company}}<br/></p>
                     <p class="content" > <span style="font-weight: bold">描述:</span>{{keyword}}<br/></p>
@@ -19,25 +18,56 @@
                               style="width: 100%">
                         <el-table-column>
                             <el-table-column
-                                    prop="id"
-                                    label="ID"
+                                    type="index"
                             >
                             </el-table-column>
                             <el-table-column
-                                    prop="expertID"
-                                    label="专家编号"
+                                    prop="id"
+                                    label="记录编号"
                             ></el-table-column>
                             <el-table-column
-                                    prop="time"
-                                    label="时间"
+                                    prop="expertID"
+                                    label="专家身份证号"
+                            ></el-table-column>
+                            <el-table-column
+                                    prop="expertName"
+                                    label="专家姓名"
+                            ></el-table-column>
+                            <el-table-column
+                                    prop="type"
+                                    label="专家类型"
+                            ></el-table-column>
+                            <el-table-column
+                                    prop="company"
+                                    label="专家单位"
+                            ></el-table-column>
+                            <el-table-column
+                                    prop="phone"
+                                    label="专家手机"
+                            ></el-table-column>
+                            <el-table-column
+                                    prop="expertArea"
+                                    label="专家领域"
+                            ></el-table-column>
+                            <el-table-column
+                                prop="secret"
+                                label="是否涉密项目"
+                            ></el-table-column>
+                            <el-table-column
+                                    prop="secretLevel"
+                                    label="涉密程度"
+                            ></el-table-column>
+                            <el-table-column
+                                    prop="startTime"
+                                    label="评审开始时间"
                             ></el-table-column>
                             <el-table-column
                                     prop="comment"
                                     label="评价"
-                                    width="400"
+                                    width="100"
                             ></el-table-column>
                             <el-table-column
-                                    prop="ontime"
+                                    prop="score"
                                     label="分数"
                             ></el-table-column>
                             <el-table-column
@@ -93,41 +123,75 @@
                     <!--placeholder="请输入书名" prefix-icon="el-icon-search"/>-->
                     <!--</template>-->
                     <el-table-column
-                            prop="id"
-                            label="ID"
-                    >
-                    </el-table-column>
+                            prop="company"
+                            label="工作单位"
+                    ></el-table-column>
                     <el-table-column
                             prop="name"
                             label="姓名"
+                    ></el-table-column>
+                    <el-table-column
+                            prop="id"
+                            label="身份证号"
                     ></el-table-column>
                     <el-table-column
                             prop="gender"
                             label="性别"
                     ></el-table-column>
                     <el-table-column
-                            prop="birth"
-                            label="生日"
-                            sortable
+                            prop="jobPosition"
+                            label="职务"
                     ></el-table-column>
                     <el-table-column
+                            prop="jobTitle"
+                            label="职称"
+                    >
+                    </el-table-column>
+                    <el-table-column
                             prop="type"
-                            label="类型"
-                            sortable
+                            label="专家类型"
                     ></el-table-column>
                     <el-table-column
                             prop="area"
-                            label="领域"
-                            sortable
+                            label="行业领域"
                     ></el-table-column>
                     <el-table-column
-                            prop="company"
-                            label="单位"
-                            sortable
+                            prop="phone"
+                            label="手机"
                     ></el-table-column>
                     <el-table-column
                             prop="secret"
-                            label="是否机密"
+                            label="是否涉密人员"
+                    ></el-table-column>
+                    <el-table-column
+                            prop="secretLevel"
+                            label="涉密程度"
+                    ></el-table-column>
+                    <el-table-column
+                            prop="address"
+                            label="通讯地址"
+                            width="200"
+                    ></el-table-column>
+                    <el-table-column
+                            prop="postcode"
+                            label="邮编"
+                            width="50"
+                    ></el-table-column>
+                    <el-table-column
+                            prop="recommendCompany"
+                            label="推荐单位"
+                    ></el-table-column>
+                    <el-table-column
+                            prop="filler"
+                            label="填报人"
+                    ></el-table-column>
+                    <el-table-column
+                            prop="fillerContact"
+                            label="填报人联系方式"
+                    ></el-table-column>
+                    <el-table-column
+                            prop="isBlocked"
+                            label="是否被拉黑"
                     ></el-table-column>
                     <el-table-column
                             fixed="right"
@@ -167,7 +231,11 @@
                 dialogVisible:false,
                 clickedrecord:'',
                 comment:'',
-                rate:''
+                rate:'',
+                startTime:'',
+                endTime:'',
+                secret:'',
+                secretLevel:''
             }
         },
         mounted: function () {
@@ -205,15 +273,19 @@
                         console.log(res.data)
                         // console.log(this)
                         this.programID=res.data.id
-                        that.number = res.data.number
+                        that.number = res.data.numberAcc+res.data.numberTech+res.data.numberMng
                         that.realtime = res.data.time
-                        var d = new Date(res.data.time)
-                        that.time = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() //+ ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds()
+                        that.startTime=res.data.startTime
+                        that.endTime=res.data.endTime
+                        var d = new Date(res.data.startTime)
+                        that.time = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds()
                         that.type = res.data.type
                         that.area = res.data.area
                         that.keyword = res.data.keyword
                         that.company = res.data.company
                         that.state = res.data.state
+                        that.secret=res.data.secret
+                        that.secretLevel=res.data.secretLevel
                         console.log(res.data.type)
                         // console.log(that.isbn)
                     }).catch(error => {
@@ -223,8 +295,8 @@
                 this.$http.get('http://localhost:8080/record/getP/'+ this.$route.query.id).then((res) => {
                     this.tableData = res.data
                     for (var i = 0; i < this.tableData.length; i++) {
-                        var d = new Date(this.tableData[i].time)
-                        this.tableData[i].time = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds()
+                        var d = new Date(this.tableData[i].startTime)
+                        this.tableData[i].startTime = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds()
                     }
                     console.log(res.data)
                 }).catch(function (err) {
@@ -242,15 +314,16 @@
                 })
             },
             end(){
-                var url = 'http://localhost:8080/program/changeState/' + this.$route.query.id
-                this.$http.get(url).then(() => {
+                var url = 'http://localhost:8080/program/endProgram/' + this.$route.query.id
+                this.$http.get(url).then((res) => {
+                    console.log(res.data)
                 }).catch(function (err) {
                     alert(err)
                 })
 
             },
             handleComment(row){
-                this.dialogVisible=true
+                this.dialogVisible=true;
                 this.clickedrecord=row
             },
             pushComment(){
@@ -258,9 +331,17 @@
                     id:this.clickedrecord.id,
                     expertID:this.clickedrecord.expertID,
                     programID:this.programID,
-                    time: this.realtime,
+                    expertName:this.clickedrecord.expertName,
+                    type:this.clickedrecord.type,
+                    expertArea:this.clickedrecord.expertArea,
+                    phone:this.clickedrecord.phone,
+                    company:this.clickedrecord.company,
+                    secret:this.secret,
+                    secretLevel:this.secretLevel,
+                    startTime:this.startTime,
+                    endTime:this.endTime,
                     comment: this.comment,
-                    ontime: this.rate
+                    score: this.rate
 
                 }
                 var url = 'http://localhost:8080/record/update'
@@ -317,8 +398,17 @@
             handlePick(row) {
                 let data = {
                     expertID: row.id,
+                    expertName:row.name,
+                    type:row.type,
+                    expertArea:row.area,
+                    phone:row.phone,
+                    company:row.company,
+                    secret:this.secret,
+                    secretLevel:this.secretLevel,
                     programID: this.$route.query.id,
-                    time:this.realtime,
+                    startTime:this.startTime,
+                    endTime:this.endTime
+
                 }
                 console.log(data)
                 var url = 'http://localhost:8080/record/insert/'
