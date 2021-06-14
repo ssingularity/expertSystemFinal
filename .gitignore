@@ -6,3 +6,4 @@
 .idea/encodings.xml
 .idea/codeStyles/Project.xml
 .idea/codeStyles/codeStyleConfig.xml
+backend/src/main/resources/application.properties

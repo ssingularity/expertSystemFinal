@@ -63,7 +63,17 @@
       <div style="text-align: center; margin-top: 10px">
         <el-button type="primary" icon="el-icon-user-solid" @click="dumpAsExcel">导出专家列表</el-button>
         <el-button type="primary" icon="el-icon-user-solid" @click="uploadExcel">导入专家列表</el-button>
+        <el-button type="primary" icon="el-icon-user-solid" @click="blockList">查看拉黑专家</el-button>
       </div>
+      <el-dialog
+          title="拉黑专家列表"
+          :visible.sync="blockedExpert"
+          width="500px">
+        <p>身份证号(ID) - 姓名</p>
+        <p v-for="blockedExpert in blocked" :key="blockedExpert.id">
+          {{blockedExpert.id}} - {{blockedExpert.name}}
+        </p>
+      </el-dialog>
       <el-dialog
           title="上传专家信息"
           :visible.sync="dialogVisible"
@@ -120,6 +130,15 @@
               this.dialogVisible = true
               console.log("upload")
             },
+            blockList:function() {
+              this.$http.get('http://localhost:8080/expert/get_blocked').then((res) => {
+                this.blocked = res.data
+                console.log(res)
+              }).catch(function (err) {
+                alert(err)
+              })
+              this.blockedExpert = true
+            },
             afterUpload:function () {
               location.reload()
             }
@@ -128,7 +147,9 @@
             return{
                 tableData:[],
                 search:'',
-                dialogVisible: false
+                dialogVisible: false,
+                blockedExpert: false,
+                blocked: []
             }
         }
     }

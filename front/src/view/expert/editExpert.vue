@@ -59,6 +59,14 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="是否拉黑">
+                      <el-select v-model="blocked" clearable placeholder="请选择">
+                        <el-option label="是" :value="true"></el-option>
+                        <el-option label="否" :value="false"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
                 </el-row>
                 <el-form-item label="单位">
                     <el-input v-model="company" ></el-input>
@@ -142,6 +150,7 @@
                     name:'',
                     phone:'',
                     gender:'',
+                    blocked:'',
                     secret:'',
                     company:'',
                     type:'',
@@ -216,6 +225,47 @@
             },
             resetForm(){
                 this.$router.push({path: '/expertDetail', query: {id: this.$route.query.id}})
+            },
+            setBlocked() {
+              if (this.blocked) {
+                let url = 'http://localhost:8080/expert/block/' + this.$route.query.id;
+                this.$http({
+                  method: 'get',
+                  url: url,
+                  headers: {
+                    'Access-Control-Allow-Credentials': true,
+                    'Access-Control-Allow-Origin': true,
+                    'Content-Type': 'application/json'
+                  },
+                }).then(response => {
+                      console.log(response.data)
+                      console.log('get response')
+                      return
+                    }).catch(error => {
+                      JSON.stringify(error)
+                      console.log(error)
+                      return
+                    })
+              } else {
+                let url = 'http://localhost:8080/expert/unblock/' + this.$route.query.id;
+                this.$http({
+                  method: 'get',
+                  url: url,
+                  headers: {
+                    'Access-Control-Allow-Credentials': true,
+                    'Access-Control-Allow-Origin': true,
+                    'Content-Type': 'application/json'
+                  },
+                }).then(response => {
+                  console.log(response.data)
+                  console.log('get response')
+                  return
+                }).catch(error => {
+                  JSON.stringify(error)
+                  console.log(error)
+                  return
+                })
+              }
             },
             submitForm(){
                 // let that = this
