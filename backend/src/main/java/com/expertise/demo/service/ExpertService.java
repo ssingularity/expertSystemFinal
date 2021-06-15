@@ -8,7 +8,7 @@ public interface ExpertService {
      Expert insert(Expert expert);
      List<Expert> findAll();
      List<Expert> findByName(String name);
-     List<Expert> findByBlocked(Boolean blocked);
+     List<Expert> findByBlocked(String blocked);
      Expert findById(String id);
      void blockById(String id);
      void unblockById(String id);

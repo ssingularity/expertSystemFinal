@@ -49,7 +49,7 @@ public class ProgramServiceImpl implements ProgramService {
         for (Record record:alreadyChose) {
             experts.removeIf(e -> e.getId().equals(record.getExpertID()));
             experts.removeIf(e -> !e.getSecret().equals(record.getSecret()));
-            experts.removeIf(Expert::getIsBlocked);
+            experts.removeIf(e -> e.getIsBlocked().equals("是"));
             switch (record.getType()) {
                 case "技术":
                     alreadyT++;

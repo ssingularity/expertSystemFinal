@@ -62,8 +62,8 @@
                   <el-col :span="4">
                     <el-form-item label="是否拉黑">
                       <el-select v-model="blocked" clearable placeholder="请选择">
-                        <el-option label="是" :value="true"></el-option>
-                        <el-option label="否" :value="false"></el-option>
+                        <el-option label="是" value="是"></el-option>
+                        <el-option label="否" value="否"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
@@ -208,7 +208,8 @@
                         that.secondaryArea=list
                         that.introduction = res.data.introduction
                         that.company = res.data.company
-                        that.secret = res.data.secret
+                        that.secret = res.data.secretLevel
+                        that.blocked = res.data.isBlocked
                         if (that.secret.length>0){
                             that.secretFlag='是'
                             that.secretshow=false
@@ -285,12 +286,14 @@
                         name: this.name,
                         phone: this.phone,
                         gender: this.gender,
-                        secret: this.secret,
+                        secret: this.secretFlag,
+                        secretLevel: this.secret,
                         company:this.company,
                         type: this.type.toString(),
                         area:this.area,
                         introduction:this.introduction,
-                        birth: this.birth
+                        birth: this.birth,
+                        isBlocked: this.blocked
                     }
                     var url2 = 'http://localhost:8080/expert/insert/'
                     this.$http({

@@ -28,7 +28,7 @@ public class ExpertController {
     @GetMapping(value = "/get_blocked")
     public List<Expert> findAllBlocked()
     {
-        return expertservice.findByBlocked(Boolean.TRUE);
+        return expertservice.findByBlocked("是");
     }
 
     @GetMapping(value = "/find/{name}")

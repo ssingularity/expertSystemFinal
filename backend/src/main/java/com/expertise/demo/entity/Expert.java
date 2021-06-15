@@ -42,7 +42,7 @@ public class Expert {
     @ExcelProperty("填报人联系方式")
     private String fillerContact;
     @ExcelProperty("是否被拉黑")
-    private Boolean isBlocked;
+    private String isBlocked;
 
     public String getNumber() {
         return number;
@@ -188,13 +188,6 @@ public class Expert {
         this.fillerContact = fillerContact;
     }
 
-    public Boolean getIsBlocked() {
-        return isBlocked;
-    }
-
-    public void setIsBlocked(Boolean isBlocked) {
-        this.isBlocked = isBlocked;
-    }
 
     public Expert(){}
 

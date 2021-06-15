@@ -26,7 +26,7 @@ public class ExpertServiceImpl implements ExpertService {
     public List<Expert> findByName(String name){
         return expertdao.findByName(name);
     }
-    public List<Expert> findByBlocked(Boolean blocked){
+    public List<Expert> findByBlocked(String blocked){
         return expertdao.findByBlocked(blocked);
     }
 
