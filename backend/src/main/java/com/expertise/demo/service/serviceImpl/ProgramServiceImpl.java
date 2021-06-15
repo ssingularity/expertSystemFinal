@@ -77,14 +77,17 @@ public class ProgramServiceImpl implements ProgramService {
                 accCandidate.add(e);
             }
         }
-        if (accCandidate.size()<2||manageCandidate.size()<2||techCandidate.size()<2){return "专家太少，自动选满缺少专家";}
+//        if (accCandidate.size()<2||manageCandidate.size()<2||techCandidate.size()<2){return "专家太少，自动选满缺少专家";}
         for (int i=alreadyA;i<p.getNumberAcc();i++){
+            if (accCandidate.size()<2) return "专家太少，自动选满缺少专家";
             makeRecord(id, p, accCandidate);
         }
         for (int i=alreadyM;i<p.getNumberMng();i++){
+            if (manageCandidate.size()<2) return "专家太少，自动选满缺少专家";
             makeRecord(id, p, manageCandidate);
         }
         for (int i=alreadyT;i<p.getNumberTech();i++){
+            if (techCandidate.size()<2) return "专家太少，自动选满缺少专家";
             makeRecord(id, p, techCandidate);
         }
 
