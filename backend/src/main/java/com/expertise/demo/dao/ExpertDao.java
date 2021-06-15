@@ -93,11 +93,7 @@ public class ExpertDao {
 
     public void deleteById(String id){
         List<Expert> old=this.expertListener.getExpertList();
-        for(Expert e:this.expertListener.getExpertList()){
-            if (e.getId().equals(id)){
-                old.remove(e);
-            }
-        }
+        old.removeIf(e -> e.getId().equals(id));
         EasyExcel.write(this.localExcelPath, Expert.class).sheet().doWrite(old);
 //        EasyExcel.read(this.localExcelPath, Record.class, this.recordListener).sheet().doRead();
 //        return

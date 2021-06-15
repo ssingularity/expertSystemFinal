@@ -200,7 +200,7 @@
                         that.phone = res.data.phone
                         that.gender = res.data.gender
                         that.birth =res.data.birth
-                        that.type = res.data.type
+                        that.type = res.data.type.split(",")
                         that.area = res.data.area   // 把领域第一个作为主领域 后续的放入副领域
                         let arr=that.area.split(",")
                         that.firstArea=arr.length>=1?arr[0]:''
@@ -269,7 +269,7 @@
             },
             submitForm(){
                 // let that = this
-                url = 'http://localhost:8080/expert/delete' + this.$route.query.id;
+                var url = 'http://localhost:8080/expert/delete/' + this.$route.query.id;
                 this.$http({
                     method: 'delete',
                     url: url,
@@ -279,44 +279,45 @@
                     }
                 }).then(response => {
                         console.log(response.data)
+                    this.area=this.firstArea+','+this.secondaryArea
+                    let data = {
+                        id:this.$route.query.id,
+                        name: this.name,
+                        phone: this.phone,
+                        gender: this.gender,
+                        secret: this.secret,
+                        company:this.company,
+                        type: this.type.toString(),
+                        area:this.area,
+                        introduction:this.introduction,
+                        birth: this.birth
+                    }
+                    var url2 = 'http://localhost:8080/expert/insert/'
+                    this.$http({
+                        method: 'post',
+                        url: url2,
+                        headers: {
+                            'Access-Control-Allow-Credentials': true,
+                            'Access-Control-Allow-Origin': true,
+                            'Content-Type': 'application/json'
+                        },
+                        data: JSON.stringify(data)
+                    })
+                        .then(response => {
+                            console.log(response.data)
+                            console.log('get response')
+                            //redirect
+                            this.$router.push({path: '/expert'})
+                        })
+                        .catch(error => {
+                            JSON.stringify(error)
+                            console.log(error)
+                        })
                     }).catch(error => {
                         JSON.stringify(error);
                         console.log(error)
                     });
-                this.area=this.firstArea+','+this.secondaryArea
-               let data = {
-                   id:this.$route.query.id,
-                    name: this.name,
-                    phone: this.phone,
-                   gender: this.gender,
-                   secret: this.secret,
-                   company:this.company,
-                   type: this.type.toString(),
-                   area:this.area,
-                   introduction:this.introduction,
-                   birth: this.birth
-                }
-                var url = 'http://localhost:8080/expert/insert/'
-                this.$http({
-                    method: 'post',
-                    url: url,
-                    headers: {
-                        'Access-Control-Allow-Credentials': true,
-                        'Access-Control-Allow-Origin': true,
-                        'Content-Type': 'application/json'
-                    },
-                    data: JSON.stringify(data)
-                })
-                    .then(response => {
-                        console.log(response.data)
-                        console.log('get response')
-                        //redirect
-                        this.$router.push({path: '/expert'})
-                    })
-                    .catch(error => {
-                        JSON.stringify(error)
-                        console.log(error)
-                    })
+
             }
         }
     }
