@@ -1,138 +1,144 @@
 <template>
-    <div>
-        <navi></navi>
-        <div style="margin-top: 10px">
-            <el-form  label-width="100px">
-                <el-row :gutter="20">
-                    <el-col :span="4">
-                        <el-form-item label="技术专家数量">
-                            <el-input v-model="numberTech" ></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="4">
-                        <el-form-item label="管理专家数量">
-                            <el-input v-model="numberMng" ></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="4">
-                        <el-form-item label="财务专家数量">
-                            <el-input v-model="numberAcc" ></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row :gutter="20">
-                    <el-col :span="4">
-                        <el-form-item label="是否机密">
-                            <el-select v-model="secretFlag" @change="getService" placeholder="请选择">
-                                <el-option label="是" value="是"></el-option>
-                                <el-option label="否" value="否"></el-option>
-                                <!--                                <el-option label="其他" value=" "></el-option>-->
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
-                        <el-form-item label="密级">
-                            <el-select v-model="secret" :disabled="secretshow" placeholder="请选择">
-                                <el-option
-                                        v-for="item in secretoptions"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-form-item label="单位" v-for="(val, index) in compNum" :key="index">
-                  <el-input v-model="compNum[index]" ></el-input>
+  <div class="card">
+    <el-row>
+      <el-col>
+        <el-card class="card">
+          <h2>新增项目</h2>
+        </el-card>
+      </el-col>
+      <el-col>
+        <el-card class="card">
+          <el-form  label-width="100px">
+            <el-row :gutter="20">
+              <el-col :span="4">
+                <el-form-item label="技术专家数量">
+                  <el-input v-model="numberTech" ></el-input>
                 </el-form-item>
-                <el-button @click="addCompany" style="margin-left: 100px; margin-top: -10px; margin-bottom: 20px">增加单位</el-button><br>
-              <div style="margin-left: 100px; margin-top: -10px; margin-bottom: 20px">
+              </el-col>
+              <el-col :span="4">
+                <el-form-item label="管理专家数量">
+                  <el-input v-model="numberMng" ></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="4">
+                <el-form-item label="财务专家数量">
+                  <el-input v-model="numberAcc" ></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="4">
+                <el-form-item label="是否机密">
+                  <el-select v-model="secretFlag" @change="getService" placeholder="请选择">
+                    <el-option label="是" value="是"></el-option>
+                    <el-option label="否" value="否"></el-option>
+                    <!--                                <el-option label="其他" value=" "></el-option>-->
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="密级">
+                  <el-select v-model="secret" :disabled="secretshow" placeholder="请选择">
+                    <el-option
+                      v-for="item in secretoptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-form-item label="单位" v-for="(val, index) in compNum" :key="index">
+              <el-input v-model="compNum[index]" ></el-input>
+            </el-form-item>
+            <el-button @click="addCompany" style="margin-left: 100px; margin-top: -10px; margin-bottom: 20px">增加单位</el-button><br>
+            <div style="margin-left: 100px; margin-top: -10px; margin-bottom: 20px">
               <p>批量导入单位</p>
-                <input
-                    ref="upload"
-                    type="file"
-                    accept=".xls,.xlsx"
-                    class="upload_file"
-                    @change="readExcel($event)"
-                />
-              </div>
-                <el-row :gutter="20">
-                    <el-col :span="10">
-                        <el-form-item label="评审时间">
-                            <el-date-picker
-                                    v-model="startTime"
-                                    type="datetime"
-                                    placeholder="选择开始时间">
-                            </el-date-picker>
-                        </el-form-item>
-                    </el-col>
-                    <el-col span="5">
-                        <el-date-picker
-                                v-model="endTime"
-                                type="datetime"
-                                placeholder="选择结束时间">
-                        </el-date-picker>
-                    </el-col>
-                    <el-col :span="6">
-                        <el-form-item label="领域">
-                            <!--                            <el-input v-model="Form.type" ></el-input>-->
-                            <el-select v-model="area" placeholder="请选择">
-                                <el-option label="集成电路" value="集成电路"></el-option>
-                                <el-option label="人工智能" value="人工智能"></el-option>
-                                <el-option label="生物医药" value="生物医药"></el-option>
-                                <el-option label="网络空间" value="网络空间"></el-option>
-                                <el-option label="新能源" value="新能源"></el-option>
-                                <el-option label="核能" value="核能"></el-option>
-                                <el-option label="航天" value="航天"></el-option>
-                                <el-option label="航空" value="航空"></el-option>
-                                <el-option label="船舶（含海洋工程）" value="船舶（含海洋工程）"></el-option>
-                                <el-option label="电子信息" value="电子信息"></el-option>
-                                <el-option label="新材料" value="新材料"></el-option>
-                                <el-option label="智能装备" value="智能装备"></el-option>
-                                <el-option label="应急" value="应急"></el-option>
-                                <el-option label="空间信息（含北斗导航）" value="空间信息（含北斗导航）"></el-option>
-                                <el-option label="其他（含财务）" value="其他（含财务）"></el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="9">
-                        <el-form-item label="备注">
-                            <el-input v-model="keyword" ></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-form-item>
-                    <el-button type="primary" @click="submitForm()">立即创建</el-button>
-                    <el-button @click="resetForm()">重置</el-button>
+              <input
+                ref="upload"
+                type="file"
+                accept=".xls,.xlsx"
+                class="upload_file"
+                @change="readExcel($event)"
+              />
+            </div>
+            <el-row :gutter="20">
+              <el-col :span="5">
+                <el-form-item label="评审时间">
+                  <el-date-picker
+                    v-model="startTime"
+                    type="datetime"
+                    placeholder="选择开始时间">
+                  </el-date-picker>
                 </el-form-item>
-            </el-form>
-        </div>
-    </div>
+              </el-col>
+              <el-col :span="5">
+                <el-date-picker
+                  v-model="endTime"
+                  type="datetime"
+                  placeholder="选择结束时间">
+                </el-date-picker>
+              </el-col>
+              <el-col>
+                <el-form-item label="领域">
+                  <!--                            <el-input v-model="Form.type" ></el-input>-->
+                  <el-select v-model="area" placeholder="请选择">
+                    <el-option label="集成电路" value="集成电路"></el-option>
+                    <el-option label="人工智能" value="人工智能"></el-option>
+                    <el-option label="生物医药" value="生物医药"></el-option>
+                    <el-option label="网络空间" value="网络空间"></el-option>
+                    <el-option label="新能源" value="新能源"></el-option>
+                    <el-option label="核能" value="核能"></el-option>
+                    <el-option label="航天" value="航天"></el-option>
+                    <el-option label="航空" value="航空"></el-option>
+                    <el-option label="船舶（含海洋工程）" value="船舶（含海洋工程）"></el-option>
+                    <el-option label="电子信息" value="电子信息"></el-option>
+                    <el-option label="新材料" value="新材料"></el-option>
+                    <el-option label="智能装备" value="智能装备"></el-option>
+                    <el-option label="应急" value="应急"></el-option>
+                    <el-option label="空间信息（含北斗导航）" value="空间信息（含北斗导航）"></el-option>
+                    <el-option label="其他（含财务）" value="其他（含财务）"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="9">
+                <el-form-item label="备注">
+                  <el-input v-model="keyword" ></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+          <div style="text-align: center">
+            <el-button type="primary" @click="submitForm">立即创建</el-button>
+            <el-button @click="resetForm()">重置</el-button>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script>
-import navi from "../../components/navi";
-import XLSX from "xlsx";
-    export default {
-        name: "add",
-        components: {navi},
-        data(){
-            return{
-                id:'',
-                    name:'',
-                    numberTech:'',
-                    numberMng:'',
-                    numberAcc:'',
-                    company:'',
-                    secret:'',
-                    area:'',
-                    startTime:'',
-                    endTime:'',
-                    keyword: '',
-                    compNum: [""],
-                secretoptions: [{
-                    value: '秘密',
+  import XLSX from "xlsx";
+  export default {
+    name: "add",
+    data(){
+      return{
+        id:'',
+        name:'',
+        numberTech:'',
+        numberMng:'',
+        numberAcc:'',
+        company:'',
+        secret:'',
+        area:'',
+        startTime:'',
+        endTime:'',
+        keyword: '',
+        compNum: [""],
+        secretoptions: [{
+          value: '秘密',
                     label: '秘密'
                 }, {
                     value: '机密',

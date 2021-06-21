@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import main from '../view/main'
 import expert from '../view/expert/expertList'
 import add from '../view/expert/addExpert'
 import edit from '../view/expert/editExpert'
@@ -15,40 +14,32 @@ Vue.use(Router)
 export default new Router({
     routes: [
         {
-            path: '/home',
-            component: main
-        },
-        {
             path: '/expert',
             component: expert
         },
         {
-            path: '/editExpert',
+            path: '/add_expert',
             component: add
         },
         {
-            path: '/reverseExpert',
+            path: '/reverse_expert',
             component: edit
         },
         {
-            path: '/programDetail',
+            path: '/program_detail',
             component: programDetail
         },
         {
-            path: '/programList',
+            path: '/program',
             component: programList
         },
         {
-            path: '/expertDetail',
+            path: '/expert_detail',
             component: expertDetail
         },
         {
-            path: '/addProgram',
+            path: '/add_program',
             component: addProgram
         },
-        {
-            path: '/',
-            redirect: '/expert'
-        }
     ]
 })

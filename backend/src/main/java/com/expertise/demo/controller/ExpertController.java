@@ -1,63 +1,85 @@
 package com.expertise.demo.controller;
 
+import com.alibaba.excel.EasyExcel;
+import com.expertise.demo.common.Result;
 import com.expertise.demo.entity.Expert;
 import com.expertise.demo.service.ExpertService;
+import com.expertise.demo.util.ExpertListener;
+import com.expertise.demo.util.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
-@CrossOrigin(origins = {"http://localhost:8081","null"},allowCredentials = "true")
 @RestController
-@RequestMapping(value="/expert",method = {RequestMethod.GET, RequestMethod.PUT,RequestMethod.DELETE, RequestMethod.POST})
+@RequestMapping(value = "/expert")
 public class ExpertController {
     @Autowired
     private ExpertService expertservice;
 
-    @PostMapping(value = "/insert")
-    public Expert addExpert(@RequestBody Expert expert){
-        return expertservice.insert(expert);
+    @PostMapping()
+    public Result addExpert(@RequestBody Expert expert) {
+        expertservice.insert(expert);
+        return ResultUtil.success();
     }
 
-    @GetMapping(value = "/get_all")
-    public List<Expert> findAll()
-    {
-        return expertservice.findAll();
+    @GetMapping()
+    public Result<List<Expert>> findAll() {
+        return ResultUtil.success(expertservice.findAll());
     }
 
-    @GetMapping(value = "/get_blocked")
-    public List<Expert> findAllBlocked()
-    {
-        return expertservice.findByBlocked("是");
+    @GetMapping(value = "/blocked")
+    public Result<List<Expert>> findAllBlocked() {
+        return ResultUtil.success(expertservice.findByBlocked());
     }
 
-    @GetMapping(value = "/find/{name}")
-    public List<Expert> findByName(@PathVariable(value = "name") String name)
-    {
-        return expertservice.findByName(name);
+    @GetMapping(value = "/{id}")
+    public Result<Expert> findById(@PathVariable(value = "id") String id) {
+        return ResultUtil.success(expertservice.findById(id));
     }
 
-    @GetMapping(value = "/get/{id}")
-    public Expert findById(@PathVariable(value = "id") String id)
-    {
-        return expertservice.findById(id);
-    }
-
-    @GetMapping(value = "/block/{id}")
-    public void blockById(@PathVariable(value = "id") String id)
-    {
+    @PostMapping(value = "/block/{id}")
+    public Result blockById(@PathVariable(value = "id") String id) {
         expertservice.blockById(id);
+        return ResultUtil.success();
     }
 
-    @GetMapping(value = "/unblock/{id}")
-    public void unblockById(@PathVariable(value = "id") String id)
-    {
+    @PostMapping(value = "/unblock/{id}")
+    public Result unblockById(@PathVariable(value = "id") String id) {
         expertservice.unblockById(id);
+        return ResultUtil.success();
     }
 
-    @DeleteMapping(value = "/delete/{id}")
-    public void delete(@PathVariable(value = "id") String id)
-    {
+    @DeleteMapping(value = "/{id}")
+    public Result delete(@PathVariable(value = "id") String id) {
         expertservice.deleteById(id);
+        return ResultUtil.success();
+    }
+
+    @GetMapping(value = "/excel")
+    public void getExcel(HttpServletResponse response) throws IOException {
+        List<Expert> list = expertservice.findAll();
+        download(response, Expert.class, list);
+    }
+
+    private void download(HttpServletResponse response, Class t, List list) throws IOException {
+        response.setContentType("application/vnd.ms-excel");
+        response.setCharacterEncoding("utf-8");
+        response.setHeader("Content-disposition", "attachment;filename=expertList.xlsx");
+        EasyExcel.write(response.getOutputStream(), t).sheet("专家列表").doWrite(list);
+    }
+
+    @PostMapping("/excel")
+    public Result<String> excelImport(@RequestParam(value = "file") MultipartFile serviceFile) throws IOException {
+        ExpertListener expertListener = new ExpertListener();
+        EasyExcel.read(serviceFile.getInputStream(), Expert.class, expertListener).sheet().doRead();
+        List<Expert> newExps = expertListener.getExpertList();
+        for (Expert exp : newExps) {
+            expertservice.insert(exp);
+        }
+        return ResultUtil.success();
     }
 }
