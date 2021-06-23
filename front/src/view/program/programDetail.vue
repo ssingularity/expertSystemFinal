@@ -7,7 +7,7 @@
         </el-card>
       </el-col>
       <el-col :span="6">
-        <el-card class="card" style="height: 60vh;">
+        <el-card class="card" style="min-height: 60vh;">
           <el-form label-position="right" label-width="100px" style="text-align: center; margin-top: 5vh">
             <el-form-item label="领域：">
               <el-tag>{{program.area}}</el-tag>
@@ -34,7 +34,7 @@
         </el-card>
       </el-col>
       <el-col :span="18">
-        <el-card class="card" style="height: 60vh">
+        <el-card class="card" style="min-height: 60vh">
           <el-table :data="tableData" stripe style="width: 100%" height="50vh"
                     cell-style="text-align: center"
                     header-cell-style="text-align: center">
@@ -95,7 +95,7 @@
           <el-row style="margin-top: 20px; text-align: right">
             <el-button :disabled="program.state === 1" @click="autoChoose">自动选择项目专家</el-button>
             <el-button type="success" @click="dumpAsExcel">导出项目专家</el-button>
-            <el-button :disabled="program.state === 1" type="danger" @click="end">冻结项目</el-button>
+            <el-button :disabled="program.state === 1" type="danger" @click="end">结束项目</el-button>
           </el-row>
           <el-dialog title="输入评价" :visible.sync="dialogVisible">
             <el-input
@@ -119,7 +119,7 @@
         <el-card class="card">
           <el-table :data="candidate.filter(data => !search || data.name.includes(search))" style="width: 100%;margin-top:10px;"
                     cell-style="text-align: center"
-                    border height="50vh"  header-cell-style="text-align: center">
+                    border min-height="50vh"  header-cell-style="text-align: center">
             <el-table-column>
               <el-table-column
                 prop="company"
@@ -192,52 +192,63 @@
 </template>
 
 <script>
-  import { getProgramById } from '@/api/program'
-  import { getRecordByProgramId } from '@/api/record'
+  import { getProgramById, autoChooseProgramById, endProgramById  } from '@/api/program'
+  import { getRecordByProgramId, insertRecord, deleteRecord, updateRecord } from '@/api/record'
   import { getExperts } from '@/api/expert'
+  import { Message } from 'element-ui'
 
   export default {
     name: "program",
-    data(){
-      return{
-        tableData:[],
-        candidate:[],
+    data() {
+      return {
+        tableData: [],
+        candidate: [],
         program: {
-          keyword:'',
-          area:'',
-          startTime:'',
-          endTime:'',
+          keyword: '',
+          area: '',
+          startTime: '',
+          endTime: '',
           number: 0,
-          company:'',
+          company: '',
           state: 0,
         },
-        search:'',
-        comment:'',
-        rate:'',
-        dialogVisible:false,
+        search: '',
+        comment: '',
+        rate: '',
+        dialogVisible: false,
       }
     },
     mounted: function () {
       this.load()
     },
     methods: {
-      dumpAsExcel:function() {
-        window.open("http://localhost:8080/file/downloadexcelbyprogram/"+this.$route.query.id, "_blank");
+      dumpAsExcel: function () {
+        window.open(`/api/program/${this.$route.query.id}/record/excel`, "_blank");
       },
-      autoChoose:function(){
-        this.$http.get('http://localhost:8080/program/auto/'+ this.$route.query.id).then((res) => {
-          // this.tableData = res.data
-          console.log(res.data)
-          if (res.data==="专家太少，自动选满缺少专家") alert("专家太少，自动选择缺少专家")
-        }).catch(function (err) {
-          alert(err)
-        })
-        this.$router.go(0)
+      autoChoose: function () {
+        autoChooseProgramById(this.$route.query.id)
+          .then(res => {
+            Message({
+              message: '自动选择专家成功',
+              type: 'success',
+              duration: 5 * 1000
+            })
+            this.load()
+          })
+          .catch(error => {
+            Message({
+              message: '专家太少，请手动选择专家',
+              type: 'success',
+              duration: 5 * 1000
+            })
+            this.load()
+
+          })
       },
       change(e) {
         this.$forceUpdate()
       },
-      load(){
+      load() {
         getProgramById(this.$route.query.id)
           .then(res => {
             this.program = res.data
@@ -251,129 +262,92 @@
             this.candidate = res.data;
           })
       },
-      end(){
-          var url = 'http://localhost:8080/program/endProgram/' + this.$route.query.id
-          this.$http.get(url).then((res) => {
-              console.log(res.data)
-          }).catch(function (err) {
-              alert(err)
+      end() {
+        endProgramById(this.$route.query.id)
+          .then(res => {
+            Message({
+              message: '成功结束项目',
+              type: 'success',
+              duration: 5 * 1000
+            })
+            this.load()
           })
+      },
+      handleComment(row) {
+        this.dialogVisible = true;
+        this.clickedrecord = row
+      },
+      pushComment() {
+        let data = {
+          id: this.clickedrecord.id,
+          expertID: this.clickedrecord.expertID,
+          programID: this.$route.query.id,
+          expertName: this.clickedrecord.expertName,
+          type: this.clickedrecord.type,
+          expertArea: this.clickedrecord.expertArea,
+          phone: this.clickedrecord.phone,
+          company: this.clickedrecord.company,
+          secret: this.program.secret,
+          secretLevel: this.program.secretLevel,
+          startTime: this.program.startTime,
+          endTime: this.program.endTime,
+          comment: this.comment,
+          score: this.rate
 
-      },
-      handleComment(row){
-          this.dialogVisible=true;
-          this.clickedrecord=row
-      },
-      pushComment(){
-          let data = {
-              id:this.clickedrecord.id,
-              expertID:this.clickedrecord.expertID,
-              programID:this.programID,
-              expertName:this.clickedrecord.expertName,
-              type:this.clickedrecord.type,
-              expertArea:this.clickedrecord.expertArea,
-              phone:this.clickedrecord.phone,
-              company:this.clickedrecord.company,
-              secret:this.secret,
-              secretLevel:this.secretLevel,
-              startTime:this.startTime,
-              endTime:this.endTime,
-              comment: this.comment,
-              score: this.rate
-
-          }
-          var url = 'http://localhost:8080/record/update'
-          this.$http({
-              method: 'post',
-              url: url,
-              headers: {
-                  'Access-Control-Allow-Credentials': true,
-                  'Access-Control-Allow-Origin': true,
-                  'Content-Type': 'application/json'
-              },
-              data: JSON.stringify(data)
+        }
+        updateRecord(data)
+          .then(res => {
+            Message({
+              message: '评价成功',
+              type: 'success',
+              duration: 5 * 1000
+            })
+            this.load()
+            this.dialogVisible = false
           })
-              .then(response => {
-                  console.log(response.data)
-                  console.log('get response')
-                  //redirect
-                  // this.$router.push({path: '/expert'})
-              })
-              .catch(error => {
-                  JSON.stringify(error)
-                  console.log(error)
-              })
-          this.dialogVisible = false
-          this.$router.go(0)
       },
-      handleDelete(row){
-          var url = 'http://localhost:8080/record/delete/'+row.id
-          this.$http({
-              method: 'delete',
-              url: url,
-              headers: {
-                  'Access-Control-Allow-Credentials': true,
-                  'Access-Control-Allow-Origin': true
-              }
+      handleDelete(row) {
+        deleteRecord(row.id)
+          .then(res => {
+            Message({
+              message: '成功删除专家',
+              type: 'success',
+              duration: 5 * 1000
+            })
+            this.load()
           })
-              .then(response => {
-                  console.log(response.data)
-              })
-              .catch(error => {
-                  JSON.stringify(error)
-                  console.log(error)
-              })
-          this.$router.go(0)
-          this.$notify({
-              title: '提醒',
-              message: '已移除此专家',
-              type: 'warning'
-          });
       },
-      handleClick(row){
-          this.$router.push({path: '/expert_detail', query: {id: row.id}})
+      handleClick(row) {
+        this.$router.push({path: '/expert_detail', query: {id: row.id}})
       },
       handlePick(row) {
-          let data = {
-              expertID: row.id,
-              expertName:row.name,
-              type:row.type,
-              expertArea:row.area,
-              phone:row.phone,
-              company:row.company,
-              secret:this.secret,
-              secretLevel:this.secretLevel,
-              programID: this.$route.query.id,
-              startTime:this.startTime,
-              endTime:this.endTime
+        let data = {
+          expertID: row.id,
+          expertName: row.name,
+          type: row.type,
+          expertArea: row.area,
+          phone: row.phone,
+          company: row.company,
+          secret: this.program.secret,
+          secretLevel: this.program.secretLevel,
+          programID: this.$route.query.id,
+          startTime: this.program.startTime,
+          endTime: this.program.endTime
 
-          }
-          console.log(data)
-          var url = 'http://localhost:8080/record/insert/'
-          this.$http({
-              method: 'post',
-              url: url,
-              headers: {
-                  'Access-Control-Allow-Credentials': true,
-                  'Access-Control-Allow-Origin': true,
-                  'Content-Type': 'application/json'
-              },
-              data: JSON.stringify(data)
-          })
-              .then(response => {
-                  console.log(response.data)
-                  console.log('get response')
-                  //redirect
-                  // this.$router.push({path: '/programDetail', query: {id: this.$route.query.id}})
-                  this.$router.go(0)
-              })
-              .catch(error => {
-                  JSON.stringify(error)
-                  console.log(error)
-              })
-          }
         }
+        console.log(data)
+        insertRecord(data)
+          .then(res => {
+            Message({
+              message: '成功选择专家',
+              type: 'success',
+              duration: 5 * 1000
+            })
+            this.load()
+          })
+      }
     }
+  }
 </script>
 
 <style scoped>

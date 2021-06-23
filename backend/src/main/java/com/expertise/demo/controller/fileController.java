@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(value="/file")
+@RequestMapping(value="/api/file")
 public class fileController {
     @Autowired
     private ExpertService expertservice;

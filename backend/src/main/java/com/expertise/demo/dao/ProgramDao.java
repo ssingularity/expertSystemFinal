@@ -38,7 +38,7 @@ public class ProgramDao {
 
     public Program insert(Program p){
         p.setId(UUID.randomUUID().toString());
-        List<Program> old=this.programListener.getProgramlist();
+        List<Program> old = this.programListener.getProgramlist();
         old.add(p);
         EasyExcel.write(this.localExcelPath, Program.class).sheet().doWrite(old);
         return p;

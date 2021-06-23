@@ -7,7 +7,7 @@
         </el-card>
       </el-col>
       <el-col :span="6">
-        <el-card class="card" style="height: 70vh;">
+        <el-card class="card" style="min-height: 70vh;">
           <el-form label-position="right" label-width="100px" style="text-align: center; margin-top: 8vh">
             <el-form-item label="姓名：">
               {{expert.name}}
@@ -35,7 +35,7 @@
         </el-card>
       </el-col>
       <el-col :span="18">
-        <el-card class="card" style="height: 70vh">
+        <el-card class="card" style="min-height: 70vh">
           <el-table :data="tableData" border style="width: 100%; margin-right: 20px" height="60vh"
                     cell-style="text-align: center"
                     header-cell-style="text-align: center">
@@ -115,10 +115,10 @@
               this.tableData = res.data
             })
         },
-        edit(){
-            this.$router.push({path: '/reverseExpert', query: {id: this.$route.query.id}})
+        edit() {
+          this.$router.push({path: '/reverse_expert', query: {id: this.$route.query.id}})
         }
-        }
+      }
     }
 </script>
 

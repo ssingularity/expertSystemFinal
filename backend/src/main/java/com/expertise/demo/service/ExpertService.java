@@ -18,6 +18,11 @@ public class ExpertService {
         return expertdao.insert(expert);
     }
 
+    public void update(Expert expert) {
+        expertdao.deleteById(expert.getId());
+        expertdao.insert(expert);
+    }
+
     public List<Expert> findAll() {
         return expertdao.findAll();
     }

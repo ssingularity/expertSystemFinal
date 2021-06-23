@@ -11,11 +11,13 @@ public class ProgramListener extends AnalysisEventListener<Program> {
 
     private List<Program> programlist = new ArrayList<>();
 
-    public List<Program> getProgramlist(){return this.programlist;}
-
-    public ProgramListener(){
+    public ProgramListener() {
         super();
         this.programlist.clear();
+    }
+
+    public List<Program> getProgramlist() {
+        return this.programlist;
     }
 
     @Override

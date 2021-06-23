@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/expert")
+@RequestMapping(value = "/api/expert")
 public class ExpertController {
     @Autowired
     private ExpertService expertservice;
@@ -41,21 +41,9 @@ public class ExpertController {
         return ResultUtil.success(expertservice.findById(id));
     }
 
-    @PostMapping(value = "/block/{id}")
-    public Result blockById(@PathVariable(value = "id") String id) {
-        expertservice.blockById(id);
-        return ResultUtil.success();
-    }
-
-    @PostMapping(value = "/unblock/{id}")
-    public Result unblockById(@PathVariable(value = "id") String id) {
-        expertservice.unblockById(id);
-        return ResultUtil.success();
-    }
-
-    @DeleteMapping(value = "/{id}")
-    public Result delete(@PathVariable(value = "id") String id) {
-        expertservice.deleteById(id);
+    @PutMapping()
+    public Result updateExpert(@RequestBody Expert expert) {
+        expertservice.update(expert);
         return ResultUtil.success();
     }
 

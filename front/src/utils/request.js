@@ -29,12 +29,13 @@ service.interceptors.response.use(
         type: 'error',
         duration: 5 * 1000
       })
+      return Promise.reject(res.message)
     } else {
       return res
     }
   },
   error => {
-    console.log('err' + error) // for debug
+    console.log(error) // for debug
     Message({
       message: error.message,
       type: 'error',

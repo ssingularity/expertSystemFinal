@@ -32,7 +32,6 @@
                   <el-select v-model="secretFlag" @change="getService" placeholder="请选择">
                     <el-option label="是" value="是"></el-option>
                     <el-option label="否" value="否"></el-option>
-                    <!--                                <el-option label="其他" value=" "></el-option>-->
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -67,22 +66,21 @@
               <el-col :span="5">
                 <el-form-item label="评审时间">
                   <el-date-picker
+                    value-format="yyyy-MM-dd HH:mm:ss"
                     v-model="startTime"
-                    type="datetime"
                     placeholder="选择开始时间">
                   </el-date-picker>
                 </el-form-item>
               </el-col>
-              <el-col :span="5">
+              <el-col :offset="2" :span="5">
                 <el-date-picker
+                  value-format="yyyy-MM-dd HH:mm:ss"
                   v-model="endTime"
-                  type="datetime"
                   placeholder="选择结束时间">
                 </el-date-picker>
               </el-col>
               <el-col>
                 <el-form-item label="领域">
-                  <!--                            <el-input v-model="Form.type" ></el-input>-->
                   <el-select v-model="area" placeholder="请选择">
                     <el-option label="集成电路" value="集成电路"></el-option>
                     <el-option label="人工智能" value="人工智能"></el-option>
@@ -120,11 +118,14 @@
 </template>
 
 <script>
-  import XLSX from "xlsx";
+  import XLSX from 'xlsx'
+  import { addProgram }from '@/api/program'
+  import { Message } from 'element-ui'
+
   export default {
     name: "add",
-    data(){
-      return{
+    data() {
+      return {
         id:'',
         name:'',
         numberTech:'',
@@ -138,137 +139,103 @@
         keyword: '',
         compNum: [""],
         secretoptions: [{
-          value: '秘密',
-                    label: '秘密'
-                }, {
-                    value: '机密',
-                    label: '机密'
-                }, {
-                    value: '绝密',
-                    label: '绝密'
-                }],
-                secretFlag:'',
-                secretshow:''
-            }
-        },
-        methods:{
-            getService(){
-                // this.secretFlag=!this.secretFlag;
-                if (this.secretFlag==='是') this.secretshow=false;
-                else {
-                    this.secretshow=true;
-                    this.secret=''
-                }
-                this.$forceUpdate()
-            },
-            addCompany() {
-              this.compNum.push("");
-              var compSum = "";
-              this.compNum.forEach((c) => {compSum += c + ", "});
-              this.company =compSum;
-              console.log(this.company)
-            },
-            resetForm(){
-                    this.name='';
-                    this.numberTech='';
-                    this.numberMng='';
-                    this.numberAcc='';
-                    this.company='';
-                    this.endTime='';
-                    this.startTime='';
-                    this.secret='';
-                    this.secretFlag='';
-                    this.secretshow='';
-                    this.area='';
-                    this.keyword='';
-                    this.compNum=["",]
-            },
-            submitForm(){
-                let compSum = "";
-                this.compNum.forEach((c) => {compSum += c + ", "});
-                // this.secret=this.secret.length?"否":this.secret;
-                let data = {
-                    name: this.name,
-                    numberTech:this.numberTech,
-                    numberMng:this.numberMng,
-                    numberAcc:this.numberAcc,
-                    company: compSum,
-                    area:this.area,
-                    startTime: this.startTime,
-                    endTime:this.endTime,
-                    keyword: this.keyword,
-                    secret: this.secretFlag,
-                    secretLevel: this.secret
-                };
-                console.log(data);
-                const url = 'http://localhost:8080/program/insert/';
-                this.$http({
-                    method: 'post',
-                    url: url,
-                    headers: {
-                        'Access-Control-Allow-Credentials': true,
-                        'Access-Control-Allow-Origin': true,
-                        'Content-Type': 'application/json'
-                    },
-                    data: JSON.stringify(data)
-                })
-                    .then(response => {
-                        console.log(response.data);
-                        this.id=response.data.id;
-                        console.log('get response');
-                        //auto choose
-                        this.$http.get('http://localhost:8080/program/auto/'+ this.id).then((res) => {
-                            // this.tableData = res.data
-                            console.log(res.data);
-                            if (res.data==="专家太少，自动选满缺少专家") alert("专家太少，自动选择缺少专家")
-                        }).catch(function (err) {
-                            alert(err)
-                        });
-                        //redirect
-                        this.$router.push({path: '/programList'})
-                    })
-                    .catch(error => {
-                        JSON.stringify(error);
-                        console.log(error)
-                    })
-
-            },
-          readExcel(e) {
-
-            console.log("call")
-            let that = this;
-            const files = e.target.files;
-            if (files.length <= 0) {
-              return false;
-            } else if (!/\.(xls|xlsx)$/.test(files[0].name.toLowerCase())) {
-              alert("上传格式不正确，请上传xls或者xlsx格式")
-              return false;
-            } else {
-              that.upload_file = files[0].name;
-            }
-            const fileReader = new FileReader();
-            fileReader.onload = ev => {
-              try {
-                const data = ev.target.result;
-                const workbook = XLSX.read(data, {
-                  type: "binary"
-                });
-                const wsname = workbook.SheetNames[0]; //取第一张表
-                const ws = XLSX.utils.sheet_to_json(workbook.Sheets[wsname]); //生成json表格内容
-                var li = []
-                for (var company in ws) {
-                  li.push(Object.values(ws[company])[0])
-                }
-                console.log(li)
-                that.compNum = li;
-              } catch (e) {
-                return false;
-              }
-            };
-            fileReader.readAsBinaryString(files[0]);
-          }
+            value: '秘密',
+            label: '秘密'
+          }, {
+              value: '机密',
+              label: '机密'
+          }, {
+              value: '绝密',
+              label: '绝密'
+        }],
+        secretFlag:'',
+        secretshow:''
+      }
+    },
+    methods:{
+      getService(){
+        // this.secretFlag=!this.secretFlag;
+        if (this.secretFlag==='是') this.secretshow=false;
+        else {
+          this.secretshow=true;
+          this.secret=''
         }
+        this.$forceUpdate()
+      },
+      addCompany() {
+        this.compNum.push("");
+        var compSum = "";
+        this.compNum.forEach((c) => {compSum += c + ", "});
+        this.company =compSum;
+        console.log(this.company)
+      },
+      resetForm(){
+        this.$router.go(0)
+      },
+      submitForm(){
+        let compSum = "";
+        this.compNum.forEach((c) => {compSum += c + ", "});
+          // this.secret=this.secret.length?"否":this.secret;
+        let data = {
+          name: this.name,
+          numberTech:this.numberTech,
+          numberMng:this.numberMng,
+          numberAcc:this.numberAcc,
+          company: compSum,
+          area:this.area,
+          startTime: this.startTime,
+          endTime:this.endTime,
+          keyword: this.keyword,
+          secret: this.secretFlag,
+          secretLevel: this.secret
+        };
+        addProgram(data)
+          .then(res => {
+            Message({
+              message: '成功创建项目',
+              type: 'success',
+              duration: 5 * 1000
+            })
+            this.$router.push('/program')
+          })
+          .catch(error => {
+            this.$router.push('/program')
+          })
+      },
+      readExcel(e) {
+        let that = this;
+        const files = e.target.files;
+        if (files.length <= 0) {
+          return false;
+        } else if (!/\.(xls|xlsx)$/.test(files[0].name.toLowerCase())) {
+          alert("上传格式不正确，请上传xls或者xlsx格式")
+          return false;
+        } else {
+          that.upload_file = files[0].name;
+        }
+        const fileReader = new FileReader();
+        fileReader.onload = ev => {
+          try {
+            const data = ev.target.result;
+            const workbook = XLSX.read(data, {
+              type: "binary"
+            });
+            const wsname = workbook.SheetNames[0]; //取第一张表
+            const ws = XLSX.utils.sheet_to_json(workbook.Sheets[wsname]); //生成json表格内容
+            var li = []
+            for (var company in ws) {
+              li.push(Object.values(ws[company])[0])
+            }
+            console.log(li)
+            that.compNum = li;
+          } catch (e) {
+            return false;
+          }
+        };
+        fileReader.readAsBinaryString(files[0]);
+      }
     }
+  }
 </script>
 
 <style scoped>

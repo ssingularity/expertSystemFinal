@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/program")
+@RequestMapping(value = "/api/program")
 public class ProgramController {
     @Autowired
     private ProgramService programservice;

@@ -24,14 +24,14 @@
           width="50"
           label="性别"
         />
-        <el-table-column
-          prop="jobPosition"
-          label="职务"
-        />
-        <el-table-column
-          prop="jobTitle"
-          label="职称"
-        />
+<!--        <el-table-column-->
+<!--          prop="jobPosition"-->
+<!--          label="职务"-->
+<!--        />-->
+<!--        <el-table-column-->
+<!--          prop="jobTitle"-->
+<!--          label="职称"-->
+<!--        />-->
         <el-table-column
           prop="type"
           label="专家类型"
@@ -66,16 +66,44 @@
       </el-table-column>
     </el-table>
     <div style="text-align: center; margin-top: 10px">
-      <el-button type="" @click="dumpAsExcel">手动新增专家</el-button>
+      <el-button type="" @click="addExpert">手动新增专家</el-button>
       <el-button type="primary" @click="uploadExcel">导入专家列表</el-button>
-      <el-button type="success" @click="dumpAsExcel">导出专家列表</el-button>
+      <el-button href="/api/expert/excel" type="success" @click="dumpAsExcel">导出专家列表</el-button>
       <el-button type="warning" @click="blockList">查看拉黑专家</el-button>
     </div>
+    <el-dialog
+      title="上传专家信息"
+      :visible.sync="dialogVisible"
+      width="500px">
+      <div style="text-align: center">
+        <el-upload
+          class="upload-demo"
+          drag
+          action="/api/expert/excel"
+          multiple>
+          <i class="el-icon-upload"></i>
+          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+          <div class="el-upload__tip" slot="tip">只能上传xls/xlsx文件</div>
+        </el-upload>
+      </div>
+      <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="afterUpload">完 成</el-button>
+        </span>
+    </el-dialog>
+    <el-dialog
+      title="拉黑专家列表"
+      :visible.sync="blockedExpert"
+      width="500px">
+      <p>身份证号(ID) - 姓名</p>
+      <p v-for="blockedExpert in blocked" :key="blockedExpert.id">
+        {{blockedExpert.id}} - {{blockedExpert.name}}
+      </p>
+    </el-dialog>
   </el-card>
 </template>
 
 <script>
-  import { getExperts } from '@/api/expert'
+  import { getExperts, getBlockedExperts  } from '@/api/expert'
 
   export default {
     name: "expert",
@@ -88,14 +116,36 @@
           .then(res => {
             this.tableData = res.data;
           })
+        getBlockedExperts()
+          .then(res => {
+              this.blocked = res.data
+          })
       },
       handleClick: function (data) {
         this.$router.push({path: '/expert_detail', query: {id: data.id}})
-      }
+      },
+      addExpert: function (data) {
+        this.$router.push({path: '/add_expert', query: {id: data.id}})
+      },
+      dumpAsExcel:function() {
+        window.open("/api/expert/excel", "_blank");
+      },
+      uploadExcel:function() {
+        this.dialogVisible = true
+      },
+      afterUpload:function () {
+        location.reload()
+      },
+      blockList:function() {
+        this.blockedExpert = true
+      },
     },
     data: function () {
       return {
-        tableData: []
+        tableData: [],
+        dialogVisible: false,
+        blockedExpert: false,
+        blocked: []
       }
     }
   }

@@ -13,33 +13,37 @@ Vue.use(Router)
 
 export default new Router({
     routes: [
-        {
-            path: '/expert',
-            component: expert
-        },
-        {
-            path: '/add_expert',
-            component: add
-        },
-        {
-            path: '/reverse_expert',
-            component: edit
-        },
-        {
-            path: '/program_detail',
-            component: programDetail
-        },
-        {
-            path: '/program',
-            component: programList
-        },
-        {
-            path: '/expert_detail',
-            component: expertDetail
-        },
-        {
-            path: '/add_program',
-            component: addProgram
-        },
+      {
+        path: '/',
+        redirect: '/expert'
+      },
+      {
+        path: '/expert',
+        component: expert
+      },
+      {
+          path: '/add_expert',
+          component: add
+      },
+      {
+          path: '/reverse_expert',
+          component: edit
+      },
+      {
+          path: '/program_detail',
+          component: programDetail
+      },
+      {
+          path: '/program',
+          component: programList
+      },
+      {
+          path: '/expert_detail',
+          component: expertDetail
+      },
+      {
+          path: '/add_program',
+          component: addProgram
+      },
     ]
 })

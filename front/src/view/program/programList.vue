@@ -39,7 +39,7 @@
         fixed="right"
         width="150">
         <template slot="header" slot-scope="scope">
-          <el-button size="small" icon="el-icon-circle-plus-outline" type="success" @click="addProgram">新增项目</el-button>
+          <el-button size="small" icon="el-icon-circle-plus-outline" type="success" @click="addProgram">随机选择专家</el-button>
         </template>
         <template slot-scope="scope">
           <el-button round @click="handleClick(scope.row)" size="small" type="primary">详情</el-button>
