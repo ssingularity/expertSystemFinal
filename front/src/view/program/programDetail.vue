@@ -34,8 +34,8 @@
         </el-card>
       </el-col>
       <el-col :span="18">
-        <el-card class="card" style="min-height: 60vh">
-          <el-table :data="tableData" stripe style="width: 100%" height="50vh"
+        <el-card class="card" >
+          <el-table :data="tableData" stripe style="width: 100%" height="80vh"
                     cell-style="text-align: center"
                     header-cell-style="text-align: center">
             <el-table-column>
@@ -237,12 +237,11 @@
           })
           .catch(error => {
             Message({
-              message: '专家太少，请手动选择专家',
-              type: 'success',
+              message: error,
+              type: 'error',
               duration: 5 * 1000
             })
             this.load()
-
           })
       },
       change(e) {

@@ -199,6 +199,11 @@
             this.$router.push('/program')
           })
           .catch(error => {
+            Message({
+              message: error,
+              type: 'error',
+              duration: 5 * 1000
+            })
             this.$router.push('/program')
           })
       },

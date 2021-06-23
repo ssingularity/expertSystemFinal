@@ -24,12 +24,16 @@ service.interceptors.response.use(
     const res = response.data
 
     if (res.code !== 0) {
-      Message({
-        message: res.message || 'Error',
-        type: 'error',
-        duration: 5 * 1000
-      })
-      return Promise.reject(res.message)
+      if (res.code === -1) {
+        Message({
+          message: res.message || 'Error',
+          type: 'error',
+          duration: 5 * 1000
+        })
+      }
+      else {
+        return Promise.reject(res.message)
+      }
     } else {
       return res
     }
