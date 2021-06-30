@@ -15,6 +15,10 @@ public class ExpertService {
 
 
     public Expert insert(Expert expert) {
+        Expert oldExpert = expertdao.findById(expert.getId());
+        if (oldExpert != null) {
+            throw new RuntimeException("ID为" + expert.getId() + "的专家已经在专家库中，不可重复添加");
+        }
         return expertdao.insert(expert);
     }
 

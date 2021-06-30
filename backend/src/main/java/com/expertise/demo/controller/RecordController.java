@@ -36,11 +36,6 @@ public class RecordController {
         return ResultUtil.success();
     }
 
-    @GetMapping(value = "/record/{id}")
-    public Result<Record> findById(@PathVariable(value = "id") Integer id) {
-        return ResultUtil.success(recordservice.findById(id));
-    }
-
     @GetMapping(value = "/program/{pid}/record")
     public Result<List<Record>> findByProgram(@PathVariable(value = "pid") String pid) {
         return ResultUtil.success(recordservice.findByProgram(pid));

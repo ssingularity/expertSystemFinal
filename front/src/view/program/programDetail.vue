@@ -98,15 +98,18 @@
             <el-button :disabled="program.state === 1" type="danger" @click="end">结束项目</el-button>
           </el-row>
           <el-dialog title="输入评价" :visible.sync="dialogVisible">
-            <el-input
-              v-model="comment"
-              clearable
-              placeholder="请填写描述"
-            />
-            <div class="block">
-              <span class="demonstration">选择整体分数</span>
-              <el-slider v-model="rate"></el-slider>
-            </div>
+            <el-form>
+              <el-form-item label="评价">
+                <el-input
+                  v-model="comment"
+                  clearable
+                  placeholder="请填写描述"
+                />
+              </el-form-item>
+              <el-form-item label="分数">
+                <el-slider v-model="rate" style="margin-top: 50px"></el-slider>
+              </el-form-item>
+            </el-form>
             <span slot="footer" class="dialog-footer">
               <el-button @click="dialogVisible = false">取 消</el-button>
               <el-button type="primary" @click="pushComment">确 定</el-button>
@@ -236,11 +239,6 @@
             this.load()
           })
           .catch(error => {
-            Message({
-              message: error,
-              type: 'error',
-              duration: 5 * 1000
-            })
             this.load()
           })
       },

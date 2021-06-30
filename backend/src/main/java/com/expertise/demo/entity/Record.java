@@ -39,16 +39,16 @@ public class Record {
     private String programID;
 
     @ExcelProperty("评审开始时间")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd hh:mm")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
     private Date startTime;
 
     @ExcelProperty("评审结束时间")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd hh:mm")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
     private Date endTime;
 
     @ExcelProperty("评价")
     private String comment;
 
     @ExcelProperty("分数")
-    private int score;
+    private Integer score;
 }

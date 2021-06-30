@@ -68,6 +68,7 @@
                   <el-date-picker
                     value-format="yyyy-MM-dd HH:mm:ss"
                     v-model="startTime"
+                    type="datetime"
                     placeholder="选择开始时间">
                   </el-date-picker>
                 </el-form-item>
@@ -75,6 +76,7 @@
               <el-col :offset="2" :span="5">
                 <el-date-picker
                   value-format="yyyy-MM-dd HH:mm:ss"
+                  type="datetime"
                   v-model="endTime"
                   placeholder="选择结束时间">
                 </el-date-picker>
@@ -199,11 +201,6 @@
             this.$router.push('/program')
           })
           .catch(error => {
-            Message({
-              message: error,
-              type: 'error',
-              duration: 5 * 1000
-            })
             this.$router.push('/program')
           })
       },

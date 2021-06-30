@@ -30,10 +30,6 @@ public class RecordService {
         return recorddao.insert(record);
     }
 
-    public Record findById(Integer id) {
-        return recorddao.findById(id);
-    }
-
     public List<Record> findByExpert(String eid){
         return recorddao.findByExpertID(eid);
     }

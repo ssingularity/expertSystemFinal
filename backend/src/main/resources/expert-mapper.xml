@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.expertise.demo.dao.mapper.ExpertMapper">
+    <!--   必须添加property属性 ，区别于是否加主键-->
+    <resultMap id="expert" type="com.expertise.demo.entity.Expert">
+        <id column="ID" property="id" javaType="String" ></id>
+        <result column="NUMBER" property="number" javaType="String" ></result>
+        <result column="COMPANY" property="company" javaType="String" ></result>
+        <result column="NAME" property="name" javaType="String" ></result>
+        <result column="GENDER" property="gender" javaType="String" ></result>
+        <result column="JOB_POSITION" property="jobPosition" javaType="String" ></result>
+        <result column="JOB_TITLE" property="jobTitle" javaType="String" ></result>
+        <result column="AREA" property="area" javaType="String" ></result>
+        <result column="INTRODUCTION" property="introduction" javaType="String" ></result>
+        <result column="PHONE" property="phone" javaType="String" ></result>
+        <result column="SECRET" property="secret" javaType="String" ></result>
+        <result column="SECRET_LEVEL" property="secretLevel" javaType="String" ></result>
+        <result column="ADDRESS" property="address" javaType="String" ></result>
+        <result column="POSTCODE" property="postcode" javaType="String" ></result>
+        <result column="RECOMMEND_COMPANY" property="recommendCompany" javaType="String" ></result>
+        <result column="FILLER" property="filler" javaType="String" ></result>
+        <result column="FILLER_CONTACT" property="fillerContact" javaType="String" ></result>
+        <result column="IS_BLOCKED" property="isBlocked" javaType="String" ></result>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.expertise.demo.entity.Expert">
+        insert into expert(NUMBER, COMPANY, NAME, ID, GENDER, JOB_POSITION, JOB_TITLE, TYPE, AREA, INTRODUCTION, PHONE, SECRET, SECRET_LEVEL, ADDRESS, POSTCODE, RECOMMEND_COMPANY, FILLER, FILLER_CONTACT, IS_BLOCKED)
+            values (#{number}, #{company}, #{name}, #{id}, #{gender}, #{jobPosition}, #{jobTitle}, #{type}, #{area}, #{introduction}, #{phone}, #{secret}, #{secretLevel}, #{address}, #{postcode}, #{recommendCompany}, #{filler}, #{fillerContact}, #{isBlocked})
+    </insert>
+
+    <select id="findAll" resultMap="expert">
+        select * from EXPERT
+    </select>
+    <select id="findById" resultMap="expert" parameterType="String">
+        select * from EXPERT where id = #{id}
+    </select>
+
+    <select id="findByBlocked" resultMap="expert">
+        select * from EXPERT where IS_BLOCKED = #{blocked}
+    </select>
+
+    <delete id="deleteById">
+        delete from EXPERT where ID = #{id}
+    </delete>
+</mapper>

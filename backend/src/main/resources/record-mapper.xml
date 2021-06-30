@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.expertise.demo.dao.mapper.RecordMapper">
+    <resultMap id="record" type="com.expertise.demo.entity.Record">
+        <id column="ID" property="id"/>
+        <result column="TYPE" property="type"/>
+        <result column="PHONE" property="phone"/>
+        <result column="SCORE" property="score"/>
+        <result column="COMPANY" property="company"/>
+        <result column="SECRET" property="secret"/>
+        <result column="SECRET_LEVEL" property="secretLevel"/>
+        <result column="START_TIME" property="startTime" jdbcType="DATETIMEOFFSET"/>
+        <result column="END_TIME" property="endTime" jdbcType="DATETIMEOFFSET"/>
+        <result column="COMMENT" property="comment"/>
+        <result column="EXPERT_I_D" property="expertID"/>
+        <result column="PROGRAM_I_D" property="programID"/>
+        <result column="EXPERT_AREA" property="expertArea"/>
+        <result column="EXPERT_NAME" property="expertName"/>
+    </resultMap>
+
+    <select id="findByProgramID" resultMap="record">
+        select * from RECORD where PROGRAM_I_D = #{id}
+    </select>
+
+    <select id="findByExpertID" resultMap="record">
+        select * from RECORD where EXPERT_I_D = #{id}
+    </select>
+
+    <delete id="deleteById">
+        delete from RECORD where ID = #{id}
+    </delete>
+
+    <insert id="insert">
+        insert into RECORD(ID, EXPERT_I_D, EXPERT_NAME, TYPE, EXPERT_AREA, PHONE, COMPANY, SECRET, SECRET_LEVEL, PROGRAM_I_D, START_TIME, END_TIME, COMMENT, SCORE)
+            values (#{id}, #{expertID}, #{expertName}, #{type}, #{expertArea}, #{phone}, #{company}, #{secret}, #{secretLevel}, #{programID}, #{startTime}, #{endTime}, #{comment}, #{score})
+    </insert>
+</mapper>

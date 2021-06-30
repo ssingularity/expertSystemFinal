@@ -25,10 +25,10 @@ public class Program {
     private String keyword;
 
     @ExcelProperty("评审开始时间")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd hh:mm")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
     private Date startTime;
 
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd hh:mm")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
     @ExcelProperty("评审结束时间")
     private Date endTime;
 
@@ -36,16 +36,16 @@ public class Program {
     private String company;
 
     @ExcelProperty("项目状态")
-    private int state;
+    private Integer state = 0;
 
     @ExcelProperty("技术专家数量")
-    private int numberTech;
+    private Integer numberTech;
 
     @ExcelProperty("管理专家数量")
-    private int numberMng;
+    private Integer numberMng;
 
     @ExcelProperty("财务专家数量")
-    private int numberAcc;
+    private Integer numberAcc;
 
     public int getNumber() {
         return this.numberTech + numberMng + numberAcc;

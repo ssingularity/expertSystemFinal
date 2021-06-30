@@ -26,16 +26,6 @@ public class RecordDaoExcelImpl implements RecordDao {
     }
 
     @Override
-    public Record findById(Integer id) {
-        for (Record r : this.recordListener.getRecordList()) {
-            if (r.getId().equals(id)) {
-                return r;
-            }
-        }
-        return null;
-    }
-
-    @Override
     public List<Record> findByExpertID(String id) {
         List<Record> result = new ArrayList<>();
         for (Record r : this.recordListener.getRecordList()) {
@@ -66,7 +56,7 @@ public class RecordDaoExcelImpl implements RecordDao {
 
     @Override
     public Record insert(Record r) {
-        r.setId(UUID.randomUUID().toString() + r.getExpertID());
+        r.setId(UUID.randomUUID().toString());
         List<Record> old = this.recordListener.getRecordList();
         old.add(r);
         EasyExcel.write(this.localExcelPath, Record.class).sheet().doWrite(old);
