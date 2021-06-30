@@ -65,7 +65,7 @@ public class RecordController {
             String expertId = record.getExpertID();
             list.add(expertservice.findById(expertId));
         });
-        download(response,Expert.class,list);
+        download(response, Expert.class, list);
     }
 
     public void download(HttpServletResponse response, Class t, List list) throws IOException {

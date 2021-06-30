@@ -1,6 +1,6 @@
 <template>
   <el-card class="card">
-    <el-table :data="tableData" style="width: 100%;margin-top:10px;" border height="100vh"
+    <el-table :data="tableData.filter(data => !search || data.name.includes(search))" style="width: 100%;margin-top:10px;" border height="100vh"
               cell-style="text-align: center"
               header-cell-style="text-align: center">
       <el-table-column>
@@ -59,6 +59,13 @@
           fixed="right"
           label="操作"
           width="200">
+          <template slot="header" slot-scope="scope">
+            <el-input
+              v-model="search"
+              prefix-icon="el-icon-search"
+              size="mini"
+              placeholder="输入专家姓名"/>
+          </template>
           <template slot-scope="scope">
             <el-button round type="primary" size="small" @click="handleClick(scope.row)">详情</el-button>
           </template>
@@ -145,6 +152,7 @@
         tableData: [],
         dialogVisible: false,
         blockedExpert: false,
+        search: '',
         blocked: []
       }
     }

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(value="/api/file")
+@RequestMapping(value = "/api/file")
 public class fileController {
     @Autowired
     private ExpertService expertservice;
@@ -31,7 +31,7 @@ public class fileController {
             String expertId = record.getExpertID();
             list.add(expertservice.findById(expertId));
         });
-        download(response,Expert.class,list);
+        download(response, Expert.class, list);
     }
 
     public void download(HttpServletResponse response, Class t, List list) throws IOException {

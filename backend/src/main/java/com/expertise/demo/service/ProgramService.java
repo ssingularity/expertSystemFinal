@@ -37,6 +37,7 @@ public class ProgramService {
         return programdao.findById(id);
     }
 
+    //FIXME 逻辑需要稍微改动一下
     public String autoChoose(String id) {
         //是否秘密，排除拉黑，三类匹配
         Program p = programdao.findById(id);

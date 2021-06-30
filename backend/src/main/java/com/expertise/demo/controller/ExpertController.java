@@ -2,9 +2,9 @@ package com.expertise.demo.controller;
 
 import com.alibaba.excel.EasyExcel;
 import com.expertise.demo.common.Result;
+import com.expertise.demo.dao.excel.ExpertDaoExcelImpl;
 import com.expertise.demo.entity.Expert;
 import com.expertise.demo.service.ExpertService;
-import com.expertise.demo.util.ExpertListener;
 import com.expertise.demo.util.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -62,7 +62,7 @@ public class ExpertController {
 
     @PostMapping("/excel")
     public Result<String> excelImport(@RequestParam(value = "file") MultipartFile serviceFile) throws IOException {
-        ExpertListener expertListener = new ExpertListener();
+        ExpertDaoExcelImpl.ExpertListener expertListener = new ExpertDaoExcelImpl.ExpertListener();
         EasyExcel.read(serviceFile.getInputStream(), Expert.class, expertListener).sheet().doRead();
         List<Expert> newExps = expertListener.getExpertList();
         for (Expert exp : newExps) {

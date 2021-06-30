@@ -1,79 +1,17 @@
 package com.expertise.demo.dao;
 
-import com.alibaba.excel.EasyExcel;
 import com.expertise.demo.entity.Record;
-import com.expertise.demo.util.RecordListener;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Repository;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-@Repository
-public class RecordDao {
-    private RecordListener recordListener=new RecordListener();
+public interface RecordDao {
+    Record findById(Integer id);
 
-    @Value("${dao.record}")
-    private String localExcelPath;
+    List<Record> findByExpertID(String id);
 
-    @PostConstruct
-    public void init() {
-        EasyExcel.read(this.localExcelPath, Record.class, this.recordListener).sheet().doRead();
-    }
+    List<Record> findByProgramID(String id);
 
+    void deleteById(String id);
 
-    public List<Record> findAll(){
-        return this.recordListener.getRecordList();
-    }
-
-    public Record findById(Integer id){
-//        List<Record> result=new ArrayList<>();
-        for(Record r:this.recordListener.getRecordList()){
-            if (r.getId().equals(id)){
-//                result.add(r);
-                    return r;
-            }
-
-        }
-        return null;
-    }
-
-    public List<Record> findByExpertID(String id){
-        List<Record> result=new ArrayList<>();
-        for(Record r:this.recordListener.getRecordList()){
-            if (r.getExpertID().equals(id)){
-                result.add(r);
-            }
-        }
-        return result;
-    }
-
-    public List<Record> findByProgramID(String Pid){
-        List<Record> result=new ArrayList<>();
-        for(Record r:this.recordListener.getRecordList()){
-            if (r.getProgramID().equals(Pid)){
-                result.add(r);
-            }
-        }
-        return result;
-    }
-
-    public void deleteById(String id){
-        List<Record> old=this.recordListener.getRecordList();
-        old.removeIf(r -> r.getId().equals(id));
-        EasyExcel.write(this.localExcelPath, Record.class).sheet().doWrite(old);
-//        EasyExcel.read(this.localExcelPath, Record.class, this.recordListener).sheet().doRead();
-//        return
-    }
-
-    public Record insert(Record r){
-        r.setId(UUID.randomUUID().toString()+r.getExpertID());
-        List<Record> old=this.recordListener.getRecordList();
-        old.add(r);
-        EasyExcel.write(this.localExcelPath, Record.class).sheet().doWrite(old);
-//        EasyExcel.read(this.localExcelPath, Record.class, this.recordListener).sheet().doRead();
-        return r;
-    }
+    Record insert(Record r);
 }

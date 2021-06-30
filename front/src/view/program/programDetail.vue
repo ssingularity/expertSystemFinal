@@ -244,9 +244,6 @@
             this.load()
           })
       },
-      change(e) {
-        this.$forceUpdate()
-      },
       load() {
         getProgramById(this.$route.query.id)
           .then(res => {

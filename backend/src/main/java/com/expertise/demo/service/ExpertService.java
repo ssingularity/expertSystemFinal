@@ -34,16 +34,4 @@ public class ExpertService {
     public Expert findById(String id) {
         return expertdao.findById(id);
     }
-
-    public void blockById(String id) {
-        expertdao.blockById(id);
-    }
-
-    public void unblockById(String id) {
-        expertdao.unblockById(id);
-    }
-
-    public void deleteById(String id) {
-        expertdao.deleteById(id);
-    }
 }
