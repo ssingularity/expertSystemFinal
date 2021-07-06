@@ -1,6 +1,6 @@
 <template>
   <el-card class="card">
-    <el-table :data="tableData" style="width: 100% ;margin-top:10px;" border height="100vh"
+    <el-table :data="tableData" style="width: 100% ;margin-top:10px;" border
               cell-style="text-align: center"
               header-cell-style="text-align: center">
       <el-table-column
@@ -46,11 +46,20 @@
         </template>
       </el-table-column>
     </el-table>
+    <div style="text-align: center">
+      <el-pagination
+        @current-change="getProgramsByOffset"
+        background
+        layout="prev, pager, next"
+        :total="total"
+        :page-size="20"
+      />
+    </div>
   </el-card>
 </template>
 
 <script>
-  import { getPrograms } from '@/api/program'
+  import { getPrograms, getSize, getProgramsByOffset } from '@/api/program'
 
   export default {
     name: "programList",
@@ -63,17 +72,28 @@
           .then(res => {
             this.tableData = res.data;
           })
+        getSize()
+          .then(res => {
+            this.total = res.data
+          })
       },
       handleClick(row) {
         this.$router.push({path: '/program_detail', query: {id: row.id}})
       },
       addProgram() {
         this.$router.push('/add_program')
+      },
+      getProgramsByOffset(offset) {
+        getProgramsByOffset(offset)
+          .then(res => {
+            this.tableData = res.data
+          })
       }
     },
     data: function () {
       return {
-        tableData: []
+        tableData: [],
+        total: 0
       }
     }
   }

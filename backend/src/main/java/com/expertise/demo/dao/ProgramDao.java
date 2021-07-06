@@ -12,4 +12,8 @@ public interface ProgramDao {
     Program insert(Program p);
 
     void changeState(String id);
+
+    List<Program> findByPageable(int offset);
+
+    Integer size();
 }

@@ -35,4 +35,14 @@
     <select id="findById" resultMap="program">
         select * from PROGRAM where ID = #{id}
     </select>
+
+    <select id="findByPageable" resultMap="program">
+        select * from PROGRAM
+        ORDER BY ID
+        LIMIT 20 OFFSET #{offset}
+    </select>
+
+    <select id="size" resultType="int">
+        select COUNT(*) from PROGRAM
+    </select>
 </mapper>

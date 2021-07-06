@@ -59,19 +59,21 @@
           fixed="right"
           label="操作"
           width="200">
-          <template slot="header" slot-scope="scope">
-            <el-input
-              v-model="search"
-              prefix-icon="el-icon-search"
-              size="mini"
-              placeholder="输入专家姓名"/>
-          </template>
           <template slot-scope="scope">
             <el-button round type="primary" size="small" @click="handleClick(scope.row)">详情</el-button>
           </template>
         </el-table-column>
       </el-table-column>
     </el-table>
+    <div style="text-align: center">
+      <el-pagination
+        @current-change="getExpertsByOffset"
+        background
+        layout="prev, pager, next"
+        :total="total"
+        :page-size="20"
+      />
+    </div>
     <div style="text-align: center; margin-top: 10px">
       <el-button type="" @click="addExpert">手动新增专家</el-button>
       <el-button type="primary" @click="uploadExcel">导入专家列表</el-button>
@@ -110,7 +112,7 @@
 </template>
 
 <script>
-  import { getExperts, getBlockedExperts  } from '@/api/expert'
+  import { getExperts, getBlockedExperts, getSize, getExpertsByOffset } from '@/api/expert'
 
   export default {
     name: "expert",
@@ -121,11 +123,15 @@
       loadData: function () {
         getExperts()
           .then(res => {
-            this.tableData = res.data;
+            this.tableData = res.data
           })
         getBlockedExperts()
           .then(res => {
               this.blocked = res.data
+          })
+        getSize()
+          .then(res => {
+            this.total = res.data
           })
       },
       handleClick: function (data) {
@@ -146,6 +152,12 @@
       blockList:function() {
         this.blockedExpert = true
       },
+      getExpertsByOffset(offset) {
+        getExpertsByOffset(offset)
+          .then(res => {
+            this.tableData = res.data
+          })
+      }
     },
     data: function () {
       return {
@@ -153,6 +165,7 @@
         dialogVisible: false,
         blockedExpert: false,
         search: '',
+        total: 0,
         blocked: []
       }
     }

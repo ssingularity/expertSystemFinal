@@ -11,9 +11,13 @@ public interface ExpertMapper {
 
     List<Expert> findAll();
 
+    List<Expert> findByPageable(int offset);
+
     Expert findById(String id);
 
     List<Expert> findByBlocked(String blocked);
 
     void deleteById(String id);
+
+    int size();
 }

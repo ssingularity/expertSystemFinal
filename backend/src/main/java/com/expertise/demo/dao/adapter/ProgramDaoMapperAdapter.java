@@ -30,6 +30,16 @@ public class ProgramDaoMapperAdapter implements ProgramDao {
     }
 
     @Override
+    public List<Program> findByPageable(int offset) {
+        return mapper.findByPageable(offset * 20);
+    }
+
+    @Override
+    public Integer size() {
+        return mapper.size();
+    }
+
+    @Override
     public void changeState(String id) {
         mapper.changeState(id);
     }

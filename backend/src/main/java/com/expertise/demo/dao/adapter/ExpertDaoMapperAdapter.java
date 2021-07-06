@@ -18,6 +18,11 @@ public class ExpertDaoMapperAdapter implements ExpertDao {
     }
 
     @Override
+    public List<Expert> findByPageable(int offset) {
+        return mapper.findByPageable(offset * 20);
+    }
+
+    @Override
     public Expert findById(String id) {
         return mapper.findById(id);
     }
@@ -37,5 +42,10 @@ public class ExpertDaoMapperAdapter implements ExpertDao {
     @Override
     public void deleteById(String id) {
         mapper.deleteById(id);
+    }
+
+    @Override
+    public Integer size() {
+        return mapper.size();
     }
 }

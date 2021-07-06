@@ -44,4 +44,13 @@
     <delete id="deleteById">
         delete from EXPERT where ID = #{id}
     </delete>
+    <select id="findByPageable" resultMap="expert">
+        select * from EXPERT
+        ORDER BY ID
+        LIMIT 20 OFFSET #{offset}
+    </select>
+
+    <select id="size" resultType="java.lang.Integer">
+        select count(*) from EXPERT
+    </select>
 </mapper>

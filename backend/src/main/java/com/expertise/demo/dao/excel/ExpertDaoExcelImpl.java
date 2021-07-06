@@ -33,6 +33,17 @@ public class ExpertDaoExcelImpl implements ExpertDao {
     }
 
     @Override
+    public Integer size() {
+        return findAll().size();
+    }
+
+    @Override
+    public List<Expert> findByPageable(int offset) {
+        List<Expert> res = findAll();
+        return res.subList(offset * 20, Math.min((offset + 1) * 20, res.size()));
+    }
+
+    @Override
     public Expert findById(String id) {
         for (Expert e : this.expertListener.getExpertList()) {
             if (e.getId().equals(id)) {

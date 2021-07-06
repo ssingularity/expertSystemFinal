@@ -174,13 +174,6 @@
                 fixed="right"
                 label="操作"
                 width="200">
-                <template slot="header" slot-scope="scope">
-                  <el-input
-                    v-model="search"
-                    prefix-icon="el-icon-search"
-                    size="mini"
-                    placeholder="输入专家姓名"/>
-                </template>
                 <template slot-scope="scope">
                   <el-button size="small" round @click="handleClick(scope.row)" >查看</el-button>
                   <el-button size="small" type="primary" round @click="handlePick(scope.row)">选择</el-button>
@@ -188,6 +181,15 @@
               </el-table-column>
             </el-table-column>
           </el-table>
+          <div style="text-align: center">
+            <el-pagination
+              @current-change="getExpertsByOffset"
+              background
+              layout="prev, pager, next"
+              :total="total"
+              :page-size="20"
+            />
+          </div>
         </el-card>
       </el-col>
     </el-row>
@@ -197,7 +199,7 @@
 <script>
   import { getProgramById, autoChooseProgramById, endProgramById  } from '@/api/program'
   import { getRecordByProgramId, insertRecord, deleteRecord, updateRecord } from '@/api/record'
-  import { getExperts } from '@/api/expert'
+  import { getExperts, getSize, getExpertsByOffset } from '@/api/expert'
   import { Message } from 'element-ui'
 
   export default {
@@ -219,6 +221,7 @@
         comment: '',
         rate: '',
         dialogVisible: false,
+        total: 0
       }
     },
     mounted: function () {
@@ -254,6 +257,10 @@
         getExperts()
           .then(res => {
             this.candidate = res.data;
+          })
+        getSize()
+          .then(res => {
+            this.total = res.data
           })
       },
       end() {
@@ -309,6 +316,12 @@
               duration: 5 * 1000
             })
             this.load()
+          })
+      },
+      getExpertsByOffset(offset) {
+        getExpertsByOffset(offset)
+          .then(res => {
+            this.candidate = res.data
           })
       },
       handleClick(row) {

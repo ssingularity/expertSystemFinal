@@ -32,6 +32,14 @@ public class ProgramService {
         return res;
     }
 
+    public List<Program> findByPageable(int offset) {
+        return programdao.findByPageable(offset);
+    }
+
+    public Integer size() {
+        return programdao.size();
+    }
+
     public List<Program> findAll() {
         return programdao.findAll();
     }

@@ -14,4 +14,8 @@ public interface ProgramMapper {
     void insert(Program p);
 
     void changeState(String id);
+
+    List<Program> findByPageable(int offset);
+
+    int size();
 }

@@ -35,3 +35,17 @@ export function endProgramById(id) {
     method: 'put'
   })
 }
+
+export function getSize() {
+  return request({
+    url: `/api/program/size`,
+    method: 'get'
+  })
+}
+
+export function getProgramsByOffset(offset) {
+  return request({
+    url: `/api/program?offset=${offset-1}`,
+    method: 'get'
+  })
+}

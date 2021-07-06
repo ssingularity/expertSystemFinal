@@ -38,3 +38,17 @@ export function getExpertById(id) {
   })
 }
 
+export function getSize() {
+  return request({
+    url: `/api/expert/size`,
+    method: 'get'
+  })
+}
+
+export function getExpertsByOffset(offset) {
+  return request({
+    url: `/api/expert?offset=${offset-1}`,
+    method: 'get'
+  })
+}
+

@@ -27,8 +27,13 @@ public class ExpertController {
     }
 
     @GetMapping()
-    public Result<List<Expert>> findAll() {
-        return ResultUtil.success(expertservice.findAll());
+    public Result<List<Expert>> findAll(@RequestParam(name = "offset", defaultValue = "0") int offset) {
+        return ResultUtil.success(expertservice.findByPageable(offset));
+    }
+
+    @GetMapping("/size")
+    public Result<Integer> size() {
+        return ResultUtil.success(expertservice.size());
     }
 
     @GetMapping(value = "/blocked")

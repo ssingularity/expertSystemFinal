@@ -8,7 +8,6 @@
       background-color="#58A5F5"
       text-color="#fff"
       active-text-color="#FFEFBA"
-      default-active="/expert"
     >
       <el-menu-item index="/expert">
         专家列表

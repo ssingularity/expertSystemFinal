@@ -16,8 +16,13 @@ public class ProgramController {
     private ProgramService programservice;
 
     @GetMapping()
-    public Result<List<Program>> findAll() {
-        return ResultUtil.success(programservice.findAll());
+    public Result<List<Program>> findAll(@RequestParam(name = "offset", defaultValue = "0") int offset) {
+        return ResultUtil.success(programservice.findByPageable(offset));
+    }
+
+    @GetMapping("/size")
+    public Result<Integer> size() {
+        return ResultUtil.success(programservice.size());
     }
 
     @PostMapping()

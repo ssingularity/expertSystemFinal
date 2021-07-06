@@ -31,6 +31,14 @@ public class ExpertService {
         return expertdao.findAll();
     }
 
+    public List<Expert> findByPageable(int offset) {
+        return expertdao.findByPageable(offset);
+    }
+
+    public Integer size() {
+        return expertdao.size();
+    }
+
     public List<Expert> findByBlocked() {
         return expertdao.findByBlocked("是");
     }

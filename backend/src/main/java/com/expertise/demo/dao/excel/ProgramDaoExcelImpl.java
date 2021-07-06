@@ -31,6 +31,17 @@ public class ProgramDaoExcelImpl implements ProgramDao {
     }
 
     @Override
+    public List<Program> findByPageable(int offset) {
+        List<Program> res = findAll();
+        return res.subList(offset * 20, Math.min((offset + 1) * 20, res.size()));
+    }
+
+    @Override
+    public Integer size() {
+        return findAll().size();
+    }
+
+    @Override
     public Program findById(String id) {
         for (Program p : this.programListener.getProgramlist()) {
             if (p.getId().equals(id)) {
