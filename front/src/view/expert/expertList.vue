@@ -24,14 +24,14 @@
           width="50"
           label="性别"
         />
-<!--        <el-table-column-->
-<!--          prop="jobPosition"-->
-<!--          label="职务"-->
-<!--        />-->
-<!--        <el-table-column-->
-<!--          prop="jobTitle"-->
-<!--          label="职称"-->
-<!--        />-->
+        <el-table-column
+          prop="jobPosition"
+          label="职务"
+        />
+        <el-table-column
+          prop="jobTitle"
+          label="职称"
+        />
         <el-table-column
           prop="type"
           label="专家类型"

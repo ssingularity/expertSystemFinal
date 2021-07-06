@@ -33,14 +33,24 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="6" style="align-items: end">
+        <el-col :span="12" style="align-items: end">
+          <el-form-item label="职务">
+            <el-input v-model="jobPosition" ></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12" style="align-items: end">
+          <el-form-item label="职称">
+            <el-input v-model="jobTitle" ></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12" style="align-items: end">
           <el-form-item label="电话">
             <el-input v-model="phone" ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6" style="align-items: end">
           <el-form-item label="类型">
-            <el-select v-model="type" multiple clearable placeholder="请选择">
+            <el-select v-model="type" clearable placeholder="请选择">
               <el-option label="技术" value="技术"></el-option>
               <el-option label="管理" value="管理"></el-option>
               <el-option label="财务" value="财务"></el-option>
@@ -73,7 +83,7 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="主领域">
-            <el-select v-model="firstArea" filterable placeholder="请选择">
+            <el-select v-model="firstArea" clearable filterable placeholder="请选择">
               <el-option label="集成电路" value="集成电路"></el-option>
               <el-option label="人工智能" value="人工智能"></el-option>
               <el-option label="生物医药" value="生物医药"></el-option>
@@ -160,7 +170,9 @@
         }],
         value: '',
         secretFlag:'',
-        secretshow:''
+        secretshow:'',
+        jobPosition: '',
+        jobTitle: ''
       }
     },
     methods:{
@@ -170,21 +182,23 @@
         this.$forceUpdate()
       },
       resetForm(){
-        this.birth='',
-          this.id='',
-          this.name='',
-          this.phone='',
-          this.gender='',
-          this.secret='',
-          this.secretFlag='',
-          this.secretshow='',
-          this.company='',
-          this.type='',
-          this.area='',
-          this.firstArea='',
-          this.secondaryArea='',
-          this.introduction='',
-          this.birth=''
+        this.birth=''
+        this.id=''
+        this.name=''
+        this.phone=''
+        this.gender=''
+        this.secret=''
+        this.secretFlag=''
+        this.secretshow=''
+        this.company=''
+        this.type=''
+        this.area=''
+        this.firstArea=''
+        this.secondaryArea=''
+        this.introduction=''
+        this.birth=''
+        this.jobPosition = ''
+        this.jobTitle = ''
       },
       submitForm(){
         this.area=this.firstArea+','+this.secondaryArea
@@ -199,6 +213,8 @@
           type: this.type.toString(),
           area:this.area,
           introduction:this.introduction,
+          jobPosition: this.jobPosition,
+          jobTitle: this.jobTitle
         }
         insertExpert(data)
           .then(res => {

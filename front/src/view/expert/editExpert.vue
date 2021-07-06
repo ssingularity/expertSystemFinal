@@ -40,7 +40,17 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="6" style="align-items: end">
+              <el-col :span="12" style="align-items: end">
+                <el-form-item label="职务">
+                  <el-input v-model="expert.jobPosition" ></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12" style="align-items: end">
+                <el-form-item label="职称">
+                  <el-input v-model="expert.jobTitle" ></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12" style="align-items: end">
                 <el-form-item label="电话">
                   <el-input v-model="expert.phone" ></el-input>
                 </el-form-item>
@@ -79,7 +89,7 @@
             <el-row :gutter="20">
               <el-col :span="6">
                 <el-form-item label="主领域">
-                  <el-select v-model="expert.firstArea" placeholder="请选择" @change="refresh">
+                  <el-select v-model="expert.firstArea" clearable placeholder="请选择" @change="refresh">
                     <el-option label="集成电路" value="集成电路"></el-option>
                     <el-option label="人工智能" value="人工智能"></el-option>
                     <el-option label="生物医药" value="生物医药"></el-option>
@@ -158,6 +168,8 @@
           introduction:'',
           birth:'',
           firstArea:'',
+          jobPosition: '',
+          jobTitle: '',
           secondaryArea: [],
         },
         secretoptions: [{

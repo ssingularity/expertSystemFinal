@@ -9,8 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
+import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 @Service
 public class ProgramService {
@@ -37,74 +40,36 @@ public class ProgramService {
         return programdao.findById(id);
     }
 
-    //FIXME 逻辑需要稍微改动一下
-    public String autoChoose(String id) {
-        //是否秘密，排除拉黑，三类匹配
+    public void autoChoose(String id) {
         Program p = programdao.findById(id);
-        List<Expert> experts = expertservice.findAll();
+        Map<String, List<Expert>> experts = expertservice.findAll()
+            .stream()
+            .filter(e -> match(e, p))
+            .collect(Collectors.groupingBy(Expert::getType));
         List<Record> alreadyChose = recordservice.findByProgram(id);
-
-        int alreadyA = 0, alreadyT = 0, alreadyM = 0;
-        experts.removeIf(e -> e.getIsBlocked().equals("是"));
-        for (Record record : alreadyChose) {
-            experts.removeIf(e -> e.getId().equals(record.getExpertID()));
-            experts.removeIf(e -> !e.getSecret().equals(record.getSecret()));
-            switch (record.getType()) {
-                case "技术":
-                    alreadyT++;
-                    break;
-                case "管理":
-                    alreadyM++;
-                    break;
-                case "财务":
-                    alreadyA++;
-                    break;
-            }
+        RandomChooseHandler handler = new RandomChooseHandler(p, alreadyChose, experts);
+        List<Expert> choseExperts = handler.doChoose();
+        makeRecords(p, choseExperts);
+        if (handler.isExpertNotEnough()) {
+            handler.generateExpertNotEnoughException();
         }
-        List<Expert> manageCandidate = new ArrayList<>(), techCandidate = new ArrayList<>(), accCandidate = new ArrayList<>();
-        for (Expert e : experts) {
-            if (e.getArea().contains(p.getArea())
-                && (!p.getCompany().contains(e.getCompany()))) {
-                switch (e.getType()) {
-                    case "技术":
-                        techCandidate.add(e);
-                        break;
-                    case "管理":
-                        manageCandidate.add(e);
-                        break;
-                    case "财务":
-                        accCandidate.add(e);
-                        break;
-                    default:
-                }
-            }
-        }
-        for (int i = alreadyA; i < p.getNumberAcc(); i++) {
-            if (accCandidate.size() < p.getNumberAcc() - alreadyA) {
-                throw new ExpertException("财务专家过少请手动选择");
-            }
-            makeRecord(id, p, accCandidate);
-        }
-        for (int i = alreadyM; i < p.getNumberMng(); i++) {
-            if (manageCandidate.size() < p.getNumberMng() - alreadyM) {
-                throw new ExpertException("管理专家过少请手动选择");
-            }
-            makeRecord(id, p, manageCandidate);
-        }
-        for (int i = alreadyT; i < p.getNumberTech(); i++) {
-            if (techCandidate.size() < p.getNumberTech() - alreadyT) {
-                throw new ExpertException("技术专家过少请手动选择");
-            }
-            makeRecord(id, p, techCandidate);
-        }
-        return "success";
     }
 
-    private void makeRecord(String id, Program p, List<Expert> Candidate) {
+    private boolean match(Expert expert, Program program) {
+        // TODO: 密级匹配
+        return expert.getIsBlocked().equals("否")
+            && !program.getCompany().contains(expert.getCompany())
+            && expert.getArea().contains(program.getArea());
+    }
+
+    private void makeRecords(Program p, List<Expert> expertList) {
+        for (Expert expert: expertList) {
+            makeRecord(p, expert);
+        }
+    }
+
+    private void makeRecord(Program p, Expert e) {
         Record record = new Record();
-        record.setProgramID(id);
-        Random rd = new Random(System.currentTimeMillis());
-        Expert e = Candidate.get(rd.nextInt(Candidate.size()));
         record.setExpertID(e.getId());
         record.setExpertName(e.getName());
         record.setType(e.getType());
@@ -112,11 +77,82 @@ public class ProgramService {
         record.setPhone(e.getPhone());
         record.setCompany(e.getCompany());
         record.setSecret(e.getSecret());
+        record.setProgramID(p.getId());
         record.setSecretLevel(p.getSecretLevel());
         record.setEndTime(p.getEndTime());
         record.setStartTime(p.getStartTime());
         recordservice.insert(record);
-        System.out.println(e.getName());
+    }
+
+    private static class RandomChooseHandler {
+        final private Map<String, List<Expert>> experts;
+
+        private Map<String, Integer> type2AlreadyChoseExpertNumberMap = new HashMap<>();
+
+        private Map<String, Integer> type2targetChoseExpertNumberMap = new HashMap<>();
+
+        private List<String> notEnoughExpertTypeList = new ArrayList<>();
+
+        public RandomChooseHandler(Program program,
+                                   List<Record> alreadyChose,
+                                   Map<String, List<Expert>> experts) {
+            this.experts = experts;
+            for (Record record : alreadyChose) {
+                this.experts.get(record.getType())
+                    .removeIf(e -> e.getId().equals(record.getExpertID()));
+                this.type2AlreadyChoseExpertNumberMap.putIfAbsent(record.getType(), 0);
+                this.type2AlreadyChoseExpertNumberMap.compute(record.getType(), (k, v) -> v + 1);
+            }
+            this.type2targetChoseExpertNumberMap.put("技术", program.getNumberTech());
+            this.type2targetChoseExpertNumberMap.put("管理", program.getNumberMng());
+            this.type2targetChoseExpertNumberMap.put("财务", program.getNumberAcc());
+
+        }
+
+        public List<Expert> doChoose() {
+            String[] types = new String[] {"技术", "管理", "财务"};
+            List<Expert> res = new ArrayList<>();
+            for (String type: types) {
+                res.addAll(this.doChoose(experts.getOrDefault(type, new ArrayList<>()),
+                    type2AlreadyChoseExpertNumberMap.getOrDefault(type, 0),
+                    type2targetChoseExpertNumberMap.get(type),
+                    type));
+            }
+            return res;
+        }
+
+        private List<Expert> doChoose(List<Expert> experts, int alreadyNumber, int targetNumber, String type) {
+            List<Expert> res = new ArrayList<>();
+            if (experts.size() < targetNumber - alreadyNumber) {
+                this.notEnoughExpertTypeList.add(type);
+                res.addAll(experts);
+                return res;
+            }
+            else if (experts.size() == targetNumber - alreadyNumber) {
+                res.addAll(experts);
+                return res;
+            }
+            else {
+                ThreadLocalRandom random = ThreadLocalRandom.current();
+                for (int i=0; i<targetNumber - alreadyNumber; ++i) {
+                    int index = random.nextInt(experts.size());
+                    res.add(experts.get(index));
+                    experts.remove(index);
+                }
+            }
+            return res;
+        }
+
+        public boolean isExpertNotEnough() {
+            return !notEnoughExpertTypeList.isEmpty();
+        }
+
+        public void generateExpertNotEnoughException() {
+            if (isExpertNotEnough()) {
+                String notEnoughTypes = String.join(",", this.notEnoughExpertTypeList);
+                throw new ExpertException(notEnoughTypes + "专家数量不够");
+            }
+        }
     }
 
     public void changeState(String id) {

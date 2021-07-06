@@ -33,7 +33,8 @@ public class ProgramController {
 
     @PostMapping(value = "/{id}/auto")
     public Result<String> autoChoose(@PathVariable(value = "id") String id) {
-        return ResultUtil.success(programservice.autoChoose(id));
+        programservice.autoChoose(id);
+        return ResultUtil.success();
     }
 
     @PutMapping(value = "/{id}/state")

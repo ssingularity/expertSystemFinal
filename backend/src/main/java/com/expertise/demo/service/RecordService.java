@@ -14,14 +14,6 @@ public class RecordService {
     private RecordDao recorddao;
 
     public Record insert(Record record){
-        //避免同一专家：先查找此项目是否有此专家
-        String pid = record.getProgramID();
-        List<Record> list=recorddao.findByExpertID(record.getExpertID());
-        for(Record r:list){
-            if(r.getProgramID().equals(pid)){
-                return r;
-            }
-        }
         return recorddao.insert(record);
     }
 
