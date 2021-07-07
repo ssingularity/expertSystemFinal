@@ -4,6 +4,7 @@ import com.alibaba.excel.EasyExcel;
 import com.expertise.demo.common.Result;
 import com.expertise.demo.dao.excel.ExpertDaoExcelImpl;
 import com.expertise.demo.entity.Expert;
+import com.expertise.demo.entity.PageableExperts;
 import com.expertise.demo.service.ExpertService;
 import com.expertise.demo.util.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +28,10 @@ public class ExpertController {
     }
 
     @GetMapping()
-    public Result<List<Expert>> findAll(@RequestParam(name = "offset", defaultValue = "0") int offset) {
-        return ResultUtil.success(expertservice.findByPageable(offset));
-    }
-
-    @GetMapping("/size")
-    public Result<Integer> size() {
-        return ResultUtil.success(expertservice.size());
+    public Result<PageableExperts> findAll(@RequestParam(name = "offset", defaultValue = "0") int offset,
+                                           @RequestParam(name = "type", defaultValue = "") String type,
+                                           @RequestParam(name = "search", defaultValue = "") String search) {
+        return ResultUtil.success(expertservice.findByPageable(type, search, offset));
     }
 
     @GetMapping(value = "/blocked")

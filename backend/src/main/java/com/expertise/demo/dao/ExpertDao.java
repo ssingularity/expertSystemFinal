@@ -1,13 +1,14 @@
 package com.expertise.demo.dao;
 
 import com.expertise.demo.entity.Expert;
+import com.expertise.demo.entity.PageableExperts;
 
 import java.util.List;
 
 public interface ExpertDao {
     List<Expert> findAll();
 
-    List<Expert> findByPageable(int offset);
+    PageableExperts findByPageable(String type, String search, int offset);
 
     Expert findById(String id);
 
@@ -16,6 +17,4 @@ public interface ExpertDao {
     Expert insert(Expert expert);
 
     void deleteById(String id);
-
-    Integer size();
 }

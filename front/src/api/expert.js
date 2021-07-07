@@ -17,13 +17,6 @@ export function updateExpert(data) {
   })
 }
 
-export function getExperts() {
-  return request({
-    url: '/api/expert',
-    method: 'get'
-  })
-}
-
 export function getBlockedExperts() {
   return request({
     url: '/api/expert/blocked',
@@ -38,16 +31,12 @@ export function getExpertById(id) {
   })
 }
 
-export function getSize() {
+export function getExpertsByOffset(type, search, offset) {
+  const url = type === ''
+    ? `/api/expert?offset=${offset-1}&`
+    : `/api/expert?offset=${offset-1}&type=${type}&search=${search}`
   return request({
-    url: `/api/expert/size`,
-    method: 'get'
-  })
-}
-
-export function getExpertsByOffset(offset) {
-  return request({
-    url: `/api/expert?offset=${offset-1}`,
+    url,
     method: 'get'
   })
 }

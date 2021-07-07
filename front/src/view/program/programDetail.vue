@@ -36,8 +36,8 @@
       <el-col :span="18">
         <el-card class="card" >
           <el-table :data="tableData" stripe style="width: 100%" height="80vh"
-                    cell-style="text-align: center"
-                    header-cell-style="text-align: center">
+                    :cell-style="style"
+                    :header-cell-style="style">
             <el-table-column>
               <el-table-column
                 prop="expertName"
@@ -120,9 +120,25 @@
 
       <el-col v-if="program.state === 0">
         <el-card class="card">
-          <el-table :data="candidate.filter(data => !search || data.name.includes(search))" style="width: 100%;margin-top:10px;"
-                    cell-style="text-align: center"
-                    border min-height="50vh"  header-cell-style="text-align: center">
+          <el-row>
+            <el-col :offset="2" :span="18">
+              <el-input placeholder="请输入内容" v-model="search">
+                <el-select v-model="select" slot="prepend" placeholder="请选择" style="width: 150px">
+                  <el-option label="姓名" value="1"></el-option>
+                  <el-option label="专家类型" value="2"></el-option>
+                  <el-option label="行业领域" value="3"></el-option>
+                </el-select>
+                <el-button type="primary" slot="append" icon="el-icon-search" @click="searchFor"></el-button>
+              </el-input>
+            </el-col>
+            <el-col :offset="1" :span="2">
+              <el-button type="primary" size="medium" @click="reset">重置</el-button>
+            </el-col>
+          </el-row>
+          <el-table :data="candidate" style="width: 100%;margin-top:10px;"
+                    :cell-style="style"
+                    border min-height="50vh"
+                    :header-cell-style="style">
             <el-table-column>
               <el-table-column
                 prop="company"
@@ -184,6 +200,7 @@
           <div style="text-align: center">
             <el-pagination
               @current-change="getExpertsByOffset"
+              :current-page.sync="currentPage"
               background
               layout="prev, pager, next"
               :total="total"
@@ -199,7 +216,7 @@
 <script>
   import { getProgramById, autoChooseProgramById, endProgramById  } from '@/api/program'
   import { getRecordByProgramId, insertRecord, deleteRecord, updateRecord } from '@/api/record'
-  import { getExperts, getSize, getExpertsByOffset } from '@/api/expert'
+  import { getExpertsByOffset } from '@/api/expert'
   import { Message } from 'element-ui'
 
   export default {
@@ -218,10 +235,15 @@
           state: 0,
         },
         search: '',
+        select: '',
+        currentPage: 1,
         comment: '',
         rate: '',
         dialogVisible: false,
-        total: 0
+        total: 0,
+        style: {
+          'text-align': 'center'
+        }
       }
     },
     mounted: function () {
@@ -254,13 +276,10 @@
           .then(res => {
             this.tableData = res.data
           })
-        getExperts()
+        getExpertsByOffset('', '', 1)
           .then(res => {
-            this.candidate = res.data;
-          })
-        getSize()
-          .then(res => {
-            this.total = res.data
+            this.candidate = res.data.experts
+            this.total = res.data.total
           })
       },
       end() {
@@ -277,6 +296,16 @@
       handleComment(row) {
         this.dialogVisible = true;
         this.clickedrecord = row
+      },
+      reset() {
+        this.search = ''
+        this.select = ''
+        this.currentPage = 1
+        getExpertsByOffset('', '', 1)
+          .then(res => {
+            this.candidate = res.data.experts
+            this.total = res.data.total
+          })
       },
       pushComment() {
         let data = {
@@ -319,9 +348,18 @@
           })
       },
       getExpertsByOffset(offset) {
-        getExpertsByOffset(offset)
+        getExpertsByOffset(this.select, this.search, offset)
           .then(res => {
-            this.candidate = res.data
+            this.candidate = res.data.experts
+            this.total = res.data.total
+          })
+      },
+      searchFor() {
+        this.currentPage = 1
+        getExpertsByOffset(this.select, this.search, 1)
+          .then(res => {
+            this.candidate = res.data.experts
+            this.total = res.data.total
           })
       },
       handleClick(row) {

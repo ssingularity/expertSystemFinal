@@ -5,11 +5,13 @@ import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.expertise.demo.dao.ExpertDao;
 import com.expertise.demo.entity.Expert;
+import com.expertise.demo.entity.PageableExperts;
 import lombok.RequiredArgsConstructor;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class ExpertDaoExcelImpl implements ExpertDao {
@@ -33,14 +35,26 @@ public class ExpertDaoExcelImpl implements ExpertDao {
     }
 
     @Override
-    public Integer size() {
-        return findAll().size();
+    public PageableExperts findByPageable(String type, String search, int offset) {
+        List<Expert> res = findAll().stream()
+            .filter(x -> match(type, search, x))
+            .collect(Collectors.toList());
+        return new PageableExperts(res.size(), res.subList(offset * 20, Math.min((offset + 1) * 20, res.size())));
     }
 
-    @Override
-    public List<Expert> findByPageable(int offset) {
-        List<Expert> res = findAll();
-        return res.subList(offset * 20, Math.min((offset + 1) * 20, res.size()));
+    private boolean match(String type, String search, Expert expert) {
+        switch(type) {
+            case "":
+                return true;
+            case "1":
+                return expert.getName().contains(search);
+            case "2":
+                return expert.getType().contains(search);
+            case "3":
+                return expert.getArea().contains(search);
+            default:
+                throw new RuntimeException("不存在的类型");
+        }
     }
 
     @Override

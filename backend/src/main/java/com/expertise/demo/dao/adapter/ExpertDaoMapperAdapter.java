@@ -3,6 +3,7 @@ package com.expertise.demo.dao.adapter;
 import com.expertise.demo.dao.ExpertDao;
 import com.expertise.demo.dao.mapper.ExpertMapper;
 import com.expertise.demo.entity.Expert;
+import com.expertise.demo.entity.PageableExperts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.Assert;
 
@@ -18,8 +19,28 @@ public class ExpertDaoMapperAdapter implements ExpertDao {
     }
 
     @Override
-    public List<Expert> findByPageable(int offset) {
-        return mapper.findByPageable(offset * 20);
+    public PageableExperts findByPageable(String type, String search, int offset) {
+        ExpertMapper.ExpertCondition condition = new ExpertMapper.ExpertCondition();
+        condition.setOffset(offset * 20);
+        search = "%" + search + "%";
+        switch (type) {
+            case "":
+                break;
+            case "1":
+                condition.setName(search);
+                break;
+            case "2":
+                condition.setType(search);
+                break;
+            case "3":
+                condition.setArea(search);
+                break;
+            default:
+                throw new RuntimeException("类型不存在");
+        }
+        List<Expert> experts = mapper.findByPageable(condition);
+        int size = mapper.size(condition);
+        return new PageableExperts(size, experts);
     }
 
     @Override
@@ -42,10 +63,5 @@ public class ExpertDaoMapperAdapter implements ExpertDao {
     @Override
     public void deleteById(String id) {
         mapper.deleteById(id);
-    }
-
-    @Override
-    public Integer size() {
-        return mapper.size();
     }
 }

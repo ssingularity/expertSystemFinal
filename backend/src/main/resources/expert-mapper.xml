@@ -46,11 +46,33 @@
     </delete>
     <select id="findByPageable" resultMap="expert">
         select * from EXPERT
+        <where>
+            <if test="area != null">
+                AREA like #{area}
+            </if>
+            <if test="name != null">
+                AND NAME like #{name}
+            </if>
+            <if test="type != null">
+                AND TYPE like #{type}
+            </if>
+        </where>
         ORDER BY ID
         LIMIT 20 OFFSET #{offset}
     </select>
 
     <select id="size" resultType="java.lang.Integer">
         select count(*) from EXPERT
+        <where>
+            <if test="area != null">
+                AREA like #{area}
+            </if>
+            <if test="name != null">
+                AND NAME like #{name}
+            </if>
+            <if test="type != null">
+                AND TYPE like #{type}
+            </if>
+        </where>
     </select>
 </mapper>

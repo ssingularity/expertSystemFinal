@@ -2,6 +2,7 @@ package com.expertise.demo.service;
 
 import com.expertise.demo.dao.ExpertDao;
 import com.expertise.demo.entity.Expert;
+import com.expertise.demo.entity.PageableExperts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,12 +32,8 @@ public class ExpertService {
         return expertdao.findAll();
     }
 
-    public List<Expert> findByPageable(int offset) {
-        return expertdao.findByPageable(offset);
-    }
-
-    public Integer size() {
-        return expertdao.size();
+    public PageableExperts findByPageable(String type, String search, int offset) {
+        return expertdao.findByPageable(type, search, offset);
     }
 
     public List<Expert> findByBlocked() {

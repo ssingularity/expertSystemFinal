@@ -67,7 +67,7 @@ public class ProgramService {
         // TODO: 密级匹配
         return expert.getIsBlocked().equals("否")
             && !program.getCompany().contains(expert.getCompany())
-            && expert.getArea().contains(program.getArea());
+            && ("财务".equals(expert.getType()) || expert.getArea().contains(program.getArea()));
     }
 
     private void makeRecords(Program p, List<Expert> expertList) {

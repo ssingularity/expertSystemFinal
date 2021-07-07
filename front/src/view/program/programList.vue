@@ -1,8 +1,8 @@
 <template>
   <el-card class="card">
     <el-table :data="tableData" style="width: 100% ;margin-top:10px;" border
-              cell-style="text-align: center"
-              header-cell-style="text-align: center">
+              :cell-style="style"
+              :header-cell-style="style">
       <el-table-column
         width="200"
         prop="id"
@@ -93,7 +93,10 @@
     data: function () {
       return {
         tableData: [],
-        total: 0
+        total: 0,
+        style: {
+          'text-align': 'center'
+        }
       }
     }
   }

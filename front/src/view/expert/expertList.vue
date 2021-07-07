@@ -1,8 +1,23 @@
 <template>
   <el-card class="card">
-    <el-table :data="tableData.filter(data => !search || data.name.includes(search))" style="width: 100%;margin-top:10px;" border height="100vh"
-              cell-style="text-align: center"
-              header-cell-style="text-align: center">
+    <el-row>
+      <el-col :offset="2" :span="18">
+        <el-input placeholder="请输入内容" v-model="search">
+          <el-select v-model="select" slot="prepend" placeholder="请选择" style="width: 150px">
+            <el-option label="姓名" value="1"></el-option>
+            <el-option label="专家类型" value="2"></el-option>
+            <el-option label="行业领域" value="3"></el-option>
+          </el-select>
+          <el-button type="primary" slot="append" icon="el-icon-search" @click="searchFor"></el-button>
+        </el-input>
+      </el-col>
+      <el-col :offset="1" :span="2">
+        <el-button type="primary" size="medium" @click="reset">重置</el-button>
+      </el-col>
+    </el-row>
+    <el-table :data="tableData" style="width: 100%;margin-top:10px;" border height="100vh"
+              :cell-style="style"
+              :header-cell-style="style">
       <el-table-column>
         <el-table-column
           prop="company"
@@ -67,6 +82,7 @@
     </el-table>
     <div style="text-align: center">
       <el-pagination
+        :current-page.sync="currentPage"
         @current-change="getExpertsByOffset"
         background
         layout="prev, pager, next"
@@ -112,7 +128,7 @@
 </template>
 
 <script>
-  import { getExperts, getBlockedExperts, getSize, getExpertsByOffset } from '@/api/expert'
+  import { getBlockedExperts, getExpertsByOffset } from '@/api/expert'
 
   export default {
     name: "expert",
@@ -121,17 +137,14 @@
     },
     methods: {
       loadData: function () {
-        getExperts()
+        getExpertsByOffset('', '', 1)
           .then(res => {
-            this.tableData = res.data
+            this.tableData = res.data.experts
+            this.total = res.data.total
           })
         getBlockedExperts()
           .then(res => {
               this.blocked = res.data
-          })
-        getSize()
-          .then(res => {
-            this.total = res.data
           })
       },
       handleClick: function (data) {
@@ -153,9 +166,28 @@
         this.blockedExpert = true
       },
       getExpertsByOffset(offset) {
-        getExpertsByOffset(offset)
+        getExpertsByOffset(this.select, this.search, offset)
           .then(res => {
-            this.tableData = res.data
+            this.tableData = res.data.experts
+            this.total = res.data.total
+          })
+      },
+      searchFor() {
+        this.currentPage = 1
+        getExpertsByOffset(this.select, this.search, 1)
+          .then(res => {
+            this.tableData = res.data.experts
+            this.total = res.data.total
+          })
+      },
+      reset() {
+        this.search = ''
+        this.select = ''
+        this.currentPage = 1
+        getExpertsByOffset('', '', 1)
+          .then(res => {
+            this.tableData = res.data.experts
+            this.total = res.data.total
           })
       }
     },
@@ -165,8 +197,13 @@
         dialogVisible: false,
         blockedExpert: false,
         search: '',
+        select: '',
         total: 0,
-        blocked: []
+        currentPage: 1,
+        blocked: [],
+        style: {
+          'text-align': 'center'
+        }
       }
     }
   }
