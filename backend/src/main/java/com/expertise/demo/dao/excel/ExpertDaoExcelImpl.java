@@ -99,7 +99,6 @@ public class ExpertDaoExcelImpl implements ExpertDao {
 
         public ExpertListener() {
             super();
-            this.expertList.clear();
         }
 
         public List<Expert> getExpertList() {
@@ -113,7 +112,6 @@ public class ExpertDaoExcelImpl implements ExpertDao {
 
         @Override
         public void doAfterAllAnalysed(AnalysisContext analysisContext) {
-            this.expertList.forEach(System.out::println);
         }
     }
 }

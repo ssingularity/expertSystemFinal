@@ -1,3 +1,10 @@
 .card {
   margin: 5px;
 }
+
+.notification {
+  height: 90vh !important;
+  width: 30vw !important;
+  overflow: auto !important;
+  bottom: 16px;
+}

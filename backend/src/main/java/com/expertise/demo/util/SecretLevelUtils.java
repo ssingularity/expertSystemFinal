@@ -1,4 +1,4 @@
-package com.expertise.demo.entity;
+package com.expertise.demo.util;
 
 import lombok.Data;
 import org.springframework.util.Assert;

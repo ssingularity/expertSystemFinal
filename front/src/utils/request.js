@@ -1,5 +1,6 @@
 import axios from 'axios'
-import { Message } from 'element-ui'
+import { Message, Notification } from 'element-ui'
+import _ from 'lodash'
 
 // create an axios instance
 const service = axios.create({
@@ -24,11 +25,13 @@ service.interceptors.response.use(
     const res = response.data
 
     if (res.code !== 0) {
-      Message({
-        message: res.message || 'Error',
-        type: 'error',
-        duration: 5 * 1000
-      })
+      if (!res.message.includes(';')) {
+        Message({
+          message: res.message || 'Error',
+          type: 'error',
+          duration: 5 * 1000
+        })
+      }
       return Promise.reject(res.message)
     } else {
       return res

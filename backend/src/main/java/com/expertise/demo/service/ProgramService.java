@@ -5,7 +5,7 @@ import com.expertise.demo.dao.ProgramDao;
 import com.expertise.demo.entity.Expert;
 import com.expertise.demo.entity.Program;
 import com.expertise.demo.entity.Record;
-import com.expertise.demo.entity.SecretLevelUtils;
+import com.expertise.demo.util.SecretLevelUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -65,7 +65,6 @@ public class ProgramService {
     }
 
     private boolean match(Expert expert, Program program) {
-        // TODO: 密级匹配
         return expert.getIsBlocked().equals("否")
             && !program.getCompany().contains(expert.getCompany())
             && ("财务".equals(expert.getType()) || expert.getArea().contains(program.getArea()))

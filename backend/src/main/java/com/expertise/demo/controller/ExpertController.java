@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.StringJoiner;
 
 @RestController
 @RequestMapping(value = "/api/expert")
@@ -68,8 +69,17 @@ public class ExpertController {
         ExpertDaoExcelImpl.ExpertListener expertListener = new ExpertDaoExcelImpl.ExpertListener();
         EasyExcel.read(serviceFile.getInputStream(), Expert.class, expertListener).sheet().doRead();
         List<Expert> newExps = expertListener.getExpertList();
+        StringJoiner stringJoiner = new StringJoiner(";");
         for (Expert exp : newExps) {
-            expertservice.insert(exp);
+            try {
+                expertservice.insert(exp);
+            }
+            catch (RuntimeException e) {
+                stringJoiner.add(e.getMessage());
+            }
+        }
+        if (stringJoiner.length() != 0) {
+            throw new RuntimeException(stringJoiner.toString());
         }
         return ResultUtil.success();
     }

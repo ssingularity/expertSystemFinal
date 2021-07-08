@@ -1,5 +1,4 @@
 import request from '@/utils/request.js'
-import axios from 'axios'
 
 export function insertExpert(data) {
   return request({
@@ -38,6 +37,14 @@ export function getExpertsByOffset(type, search, offset) {
   return request({
     url,
     method: 'get'
+  })
+}
+
+export function updateExcel(formData) {
+  return request.post('/api/expert/excel', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data;charset=UTF-8'
+    },
   })
 }
 

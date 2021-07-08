@@ -104,7 +104,8 @@
         <el-upload
           class="upload-demo"
           drag
-          action="/api/expert/excel"
+          action="#"
+          :http-request="uploadExcel2Server"
           multiple>
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -128,7 +129,7 @@
 </template>
 
 <script>
-  import { getBlockedExperts, getExpertsByOffset } from '@/api/expert'
+  import { getBlockedExperts, getExpertsByOffset, updateExcel } from '@/api/expert'
 
   export default {
     name: "expert",
@@ -189,6 +190,27 @@
             this.tableData = res.data.experts
             this.total = res.data.total
           })
+      },
+      uploadExcel2Server(param) {
+        const formData = new FormData()
+        formData.append('file', param.file)
+        updateExcel(formData)
+          .catch(error => {
+            console.log(error)
+            let resMessage = ''
+            _.forEach(error.split(';'), value => {
+              resMessage += value
+              resMessage += '<br/>'
+            })
+            this.$notify({
+              title: '错误提示',
+              dangerouslyUseHTMLString: true,
+              message: resMessage,
+              duration: 0,
+              customClass: 'notification',
+              type: 'error'
+            })
+          })
       }
     },
     data: function () {
@@ -209,6 +231,5 @@
   }
 </script>
 
-<style scoped>
-
+<style>
 </style>
