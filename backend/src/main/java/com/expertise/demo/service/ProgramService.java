@@ -5,6 +5,7 @@ import com.expertise.demo.dao.ProgramDao;
 import com.expertise.demo.entity.Expert;
 import com.expertise.demo.entity.Program;
 import com.expertise.demo.entity.Record;
+import com.expertise.demo.entity.SecretLevelUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -67,7 +68,20 @@ public class ProgramService {
         // TODO: 密级匹配
         return expert.getIsBlocked().equals("否")
             && !program.getCompany().contains(expert.getCompany())
-            && ("财务".equals(expert.getType()) || expert.getArea().contains(program.getArea()));
+            && ("财务".equals(expert.getType()) || expert.getArea().contains(program.getArea()))
+            && matchSecret(expert, program);
+    }
+
+    private boolean matchSecret(Expert expert, Program program) {
+        if (program.getSecret().equals("否")) {
+            return true;
+        }
+        else if (expert.getSecret().equals("否")) {
+            return false;
+        }
+        else {
+            return SecretLevelUtils.compare(expert.getSecretLevel(), program.getSecretLevel());
+        }
     }
 
     private void makeRecords(Program p, List<Expert> expertList) {
@@ -92,7 +106,7 @@ public class ProgramService {
         recordservice.insert(record);
     }
 
-    private static class RandomChooseHandler {
+    private class RandomChooseHandler {
         final private Map<String, List<Expert>> experts;
 
         private Map<String, Integer> type2AlreadyChoseExpertNumberMap = new HashMap<>();

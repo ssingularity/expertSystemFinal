@@ -38,7 +38,7 @@
 
     <select id="findByPageable" resultMap="program">
         select * from PROGRAM
-        ORDER BY ID
+        ORDER BY END_TIME DESC
         LIMIT 20 OFFSET #{offset}
     </select>
 
